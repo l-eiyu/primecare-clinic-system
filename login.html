@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Log in to your PrimeCare Medical Clinic patient account." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeCare – Log In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="login-page">
+
+  <!-- Logo -->
+  <div class="auth-top-image">
+    <img src="assets/clinic-bg.jpg" alt="PrimeCare Medical Clinic" class="auth-top-img" />
+    <div class="auth-top-overlay"></div>
+  </div>
+  <div class="login-logo">
+    <div class="login-logo-icon">+</div>
+    <h1>PrimeCare</h1>
+    <p class="subtitle">Medical Clinic</p>
+    <p class="login-logo-tag">Your Health, Our Priority</p>
+  </div>
+
+  <!-- Login Card -->
+  <div class="login-card">
+    <h2>Welcome Back 👋</h2>
+    <p class="card-sub">Enter your credentials to continue</p>
+
+    <div class="login-form">
+
+      <!-- Error alert (shown when credentials are wrong) -->
+      <div class="alert-error" id="errorAlert" style="display: none;">
+        The email or password you entered is incorrect. Please try again.
+        <button onclick="document.getElementById('errorAlert').style.display='none'">✕</button>
+      </div>
+
+      <!-- Email field -->
+      <div class="input-group">
+        <input
+          type="text"
+          class="input-field"
+          id="emailInput"
+          placeholder="Username/Email"
+        />
+      </div>
+
+      <!-- Password field -->
+      <div class="input-group">
+        <input
+          type="password"
+          class="input-field"
+          id="passwordInput"
+          placeholder="Password"
+        />
+        <span class="eye-icon" onclick="togglePassword()">
+          <!-- Eye icon -->
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </span>
+      </div>
+
+      <!-- Remember me + Forgot password -->
+      <div class="form-options">
+        <label class="remember-me">
+          <input type="checkbox" /> Remember me
+        </label>
+        <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+      </div>
+
+      <!-- Login button -->
+      <button class="btn btn-white" onclick="handleLogin()">Log in</button>
+
+    </div>
+  </div>
+
+  <!-- Sign Up link -->
+  <div class="login-footer">
+    <p>
+      <span class="line"></span>
+      Don't have an account?
+      <span class="line"></span>
+    </p>
+    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById('passwordInput');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function fillDemo() {
+      document.getElementById('emailInput').value    = 'patient@primecare.ph';
+      document.getElementById('passwordInput').value = 'patient123';
+    }
+
+    // If already logged in, go to home
+    if (PrimeCareDB.isLoggedIn()) {
+      window.location.href = 'home.html';
+    }
+
+    function handleLogin() {
+      var email     = document.getElementById('emailInput').value.trim();
+      var password  = document.getElementById('passwordInput').value.trim();
+      var errorAlert    = document.getElementById('errorAlert');
+      var emailInput    = document.getElementById('emailInput');
+      var passwordInput = document.getElementById('passwordInput');
+
+      // Validate fields
+      if (!email || !password) {
+        errorAlert.style.display = 'flex';
+        emailInput.classList.add('error');
+        passwordInput.classList.add('error');
+        return;
+      }
+
+      // Check against real DB
+      var result = PrimeCareDB.loginUser(email, password);
+
+      if (result.success) {
+        errorAlert.style.display = 'none';
+        emailInput.classList.remove('error');
+        passwordInput.classList.remove('error');
+        showToast('success', 'Welcome back, ' + result.user.name + '!', 'Redirecting to your dashboard...', 1500);
+        setTimeout(function() { window.location.href = 'home.html'; }, 1200);
+      } else {
+        errorAlert.style.display = 'flex';
+        emailInput.classList.add('error');
+        passwordInput.classList.add('error');
+      }
+    }
+  </script>
+
+</body>
+</html>

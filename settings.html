@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Manage your PrimeCare Medical Clinic account settings." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeCare – Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="settings-page">
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="sideDrawer">
+    <div class="drawer-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="appointments.html">Appointments</a></li>
+      <li><a href="messages.html">Messages</a></li>
+      <li><a href="settings.html" class="active">Settings</a></li>
+    </ul>
+    <div class="drawer-logout"><a href="index.html" onclick="PrimeCareDB.logout()">Log out</a></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button>
+    </div>
+    <div class="navbar-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <div class="navbar-right">
+      <div class="avatar-placeholder">A</div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="home.html">Home</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Settings</li></ol></nav>
+  <div class="settings-body">
+    <h2>Settings</h2>
+
+    <!-- Profile -->
+    <div class="settings-group">
+      <a href="profile.html" class="settings-item" style="text-decoration:none;">
+        <span>Full Name</span>
+        <span>Adrian Lei Frio ›</span>
+      </a>
+      <a href="profile.html" class="settings-item" style="text-decoration:none;">
+        <span>Username</span>
+        <span>adrianfrio ›</span>
+      </a>
+      <a href="profile.html" class="settings-item" style="text-decoration:none;">
+        <span>Email</span>
+        <span>adrian@email.com ›</span>
+      </a>
+      <a href="profile.html" class="settings-item" style="text-decoration:none;">
+        <span>Contact Number</span>
+        <span>+63 912 345 6789 ›</span>
+      </a>
+    </div>
+
+    <!-- Account -->
+    <p style="font-size:0.8rem; font-weight:800; color:#4a6fa5; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">Account</p>
+    <div class="settings-group">
+      <div class="settings-item">
+        <span>Change Password</span>
+        <span>›</span>
+      </div>
+      <div class="settings-item">
+        <span>Notifications</span>
+        <span>On ›</span>
+      </div>
+      <div class="settings-item">
+        <span>Language</span>
+        <span>English ›</span>
+      </div>
+    </div>
+
+    <!-- Appointment Preferences -->
+    <p style="font-size:0.8rem; font-weight:800; color:#4a6fa5; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">Appointments</p>
+    <div class="settings-group">
+      <div class="settings-item">
+        <span>Default Mode of Meeting</span>
+        <span>Face-to-Face ›</span>
+      </div>
+      <div class="settings-item">
+        <span>SMS Reminders</span>
+        <span>On ›</span>
+      </div>
+    </div>
+
+    <!-- Support -->
+    <p style="font-size:0.8rem; font-weight:800; color:#4a6fa5; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em;">Support</p>
+    <div class="settings-group">
+      <div class="settings-item">
+        <span>Help Center</span>
+        <span>›</span>
+      </div>
+      <div class="settings-item">
+        <span>Privacy Policy</span>
+        <span>›</span>
+      </div>
+      <div class="settings-item">
+        <span>Terms of Service</span>
+        <span>›</span>
+      </div>
+    </div>
+
+    <!-- Log Out -->
+    <div class="settings-group">
+      <div class="settings-item" onclick="showToast('info', 'Logged Out', 'You have been successfully logged out.'); setTimeout(function(){ window.location.href='index.html'; }, 1000);" style="color:#e74c3c; cursor:pointer; justify-content:center;">
+        <span style="color:#e74c3c; font-weight:800;">Log Out</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    requireLogin();
+
+    function saveSettings() {
+      showToast('success', 'Settings Saved!', 'Your preferences have been updated.');
+    }
+
+    // Load real user data into settings display
+    var settingsUser = PrimeCareDB.getCurrentUser();
+    if (settingsUser) {
+      var nameEl    = document.querySelector('.settings-item:nth-child(1) span:last-child');
+      var userEl    = document.querySelector('.settings-item:nth-child(2) span:last-child');
+      var emailEl   = document.querySelector('.settings-item:nth-child(3) span:last-child');
+      var contactEl = document.querySelector('.settings-item:nth-child(4) span:last-child');
+      if (nameEl)    nameEl.textContent    = settingsUser.name     + ' ›';
+      if (userEl)    userEl.textContent    = settingsUser.username + ' ›';
+      if (emailEl)   emailEl.textContent   = settingsUser.email    + ' ›';
+      if (contactEl) contactEl.textContent = (settingsUser.contact || '+63 9XX XXX XXXX') + ' ›';
+    }
+
+    function openDrawer()  { document.getElementById('sideDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('sideDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+  </script>
+  </main>
+
+  <footer class="inner-footer">
+    <p>© 2026 PrimeCare Medical Clinic. All rights reserved.</p>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>

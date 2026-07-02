@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="description" content="PrimeCare Admin – manage patient messages." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PrimeCare – Admin Messages</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+  <script src="db.js"></script>
+  <script src="admin-auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="admin-page">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-brand"><div class="brand-name">PrimeCare</div><div class="brand-sub">Admin Portal</div></div>
+    <nav class="admin-nav">
+      <a href="admin-dashboard.html"    class="admin-nav-item">       <span class="admin-nav-icon">📊</span> Dashboard</a>
+      <a href="admin-appointments.html" class="admin-nav-item">       <span class="admin-nav-icon">📅</span> Appointments</a>
+      <a href="admin-patients.html"     class="admin-nav-item">       <span class="admin-nav-icon">👥</span> Patients</a>
+      <a href="admin-doctors.html"      class="admin-nav-item">       <span class="admin-nav-icon">👨‍⚕️</span> Doctors</a>
+      <a href="admin-messages.html"     class="admin-nav-item active"> <span class="admin-nav-icon">✉️</span> Messages</a>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="admin-login.html" class="admin-logout-btn" onclick="PrimeCareDB.logout()">🚪 Log Out</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button class="admin-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <h1 class="admin-page-title">Messages</h1>
+      </div>
+      <div class="admin-topbar-right">
+        <div class="admin-user-info"><div class="admin-avatar">AD</div><span>Admin</span></div>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="admin-dashboard.html">Admin</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Messages</li></ol></nav>
+      <div class="admin-messages-layout">
+
+        <!-- Message list -->
+        <section class="admin-msg-list">
+          <div class="admin-search" style="margin-bottom:14px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Search messages..." />
+          </div>
+
+          <div class="admin-msg-item active" onclick="openMsg(0)">
+            <div class="admin-msg-avatar">AF</div>
+            <div class="admin-msg-preview">
+              <p class="admin-msg-name">Adrian Lei Frio</p>
+              <p class="admin-msg-text">I would like to follow up on my appointment...</p>
+            </div>
+            <span class="admin-msg-time">10:30 AM</span>
+          </div>
+
+          <div class="admin-msg-item" onclick="openMsg(1)">
+            <div class="admin-msg-avatar">MC</div>
+            <div class="admin-msg-preview">
+              <p class="admin-msg-name">Maria Clara</p>
+              <p class="admin-msg-text">Can I reschedule my appointment?</p>
+            </div>
+            <span class="admin-msg-time">9:15 AM</span>
+          </div>
+
+          <div class="admin-msg-item" onclick="openMsg(2)">
+            <div class="admin-msg-avatar">PC</div>
+            <div class="admin-msg-preview">
+              <p class="admin-msg-name">Pedro Cruz</p>
+              <p class="admin-msg-text">What documents do I need to bring?</p>
+            </div>
+            <span class="admin-msg-time">Yesterday</span>
+          </div>
+
+        </section>
+
+        <!-- Conversation -->
+        <section class="admin-msg-convo">
+          <div class="admin-msg-convo-header" id="convoHeader">
+            <div class="admin-list-avatar" id="convoAvatar">AF</div>
+            <div>
+              <p class="admin-list-name" id="convoName">Adrian Lei Frio</p>
+              <p class="admin-list-sub" id="convoSub">Patient</p>
+            </div>
+          </div>
+
+          <div class="msg-thread" id="convoThread" style="max-height:400px; background:#f0f8f8; padding:16px;"></div>
+
+          <div class="msg-reply-box">
+            <input type="text" class="msg-reply-input" id="adminReplyInput" placeholder="Type a reply..." onkeydown="if(event.key==='Enter') adminSendReply()" />
+            <button class="msg-send-btn" onclick="adminSendReply()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+              </svg>
+            </button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const convos = [
+      { name:'Adrian Lei Frio', avatar:'AF', thread:[
+        {from:'them', text:'Hello, I would like to follow up on my appointment scheduled for February 10.', time:'10:25 AM'},
+        {from:'them', text:'Is it still confirmed?', time:'10:26 AM'},
+        {from:'me',   text:'Hi Adrian! Yes, your appointment with Dr. Buena is confirmed for February 10 at 10:00 AM.', time:'10:30 AM'},
+      ]},
+      { name:'Maria Clara', avatar:'MC', thread:[
+        {from:'them', text:'Good morning! Can I reschedule my appointment to next week?', time:'9:10 AM'},
+        {from:'me',   text:'Good morning Maria! Yes, we can reschedule. What date works for you?', time:'9:15 AM'},
+      ]},
+      { name:'Pedro Cruz', avatar:'PC', thread:[
+        {from:'them', text:'Hi, what documents do I need to bring for my laboratory test?', time:'Yesterday'},
+        {from:'me',   text:'Hi Pedro! Please bring a valid ID and your referral letter from your doctor.', time:'Yesterday'},
+      ]},
+    ];
+
+    let currentConvo = 0;
+
+    function openMsg(index) {
+      currentConvo = index;
+      const c = convos[index];
+      document.getElementById('convoAvatar').textContent = c.avatar;
+      document.getElementById('convoName').textContent   = c.name;
+      renderConvo(c.thread);
+      document.querySelectorAll('.admin-msg-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+
+    function renderConvo(thread) {
+      const el = document.getElementById('convoThread');
+      el.innerHTML = thread.map(function(m) {
+        return '<div class="msg-bubble-row '+(m.from==='me'?'me':'them')+'">' +
+          '<div class="msg-bubble"><p>'+m.text+'</p><span class="msg-bubble-time">'+m.time+'</span></div></div>';
+      }).join('');
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function adminSendReply() {
+      const input = document.getElementById('adminReplyInput');
+      const text  = input.value.trim();
+      if (!text) return;
+      convos[currentConvo].thread.push({ from:'me', text: text, time:'Just now' });
+      showToast('success','Reply Sent!','Your message has been delivered to the patient.');
+      renderConvo(convos[currentConvo].thread);
+      input.value = '';
+    }
+
+    requireAdmin();
+
+    function toggleSidebar() { document.getElementById('adminSidebar').classList.toggle('collapsed'); }
+
+    openMsg(0);
+  </script>
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>

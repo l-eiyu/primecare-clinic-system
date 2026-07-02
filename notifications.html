@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Your notifications – PrimeCare Medical Clinic" />
+  <title>PrimeCare – Notifications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="notifications-page">
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="sideDrawer">
+    <div class="drawer-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="appointments.html">Appointments</a></li>
+      <li><a href="messages.html">Messages</a></li>
+      <li><a href="settings.html">Settings</a></li>
+    </ul>
+    <div class="drawer-logout"><a href="index.html" onclick="PrimeCareDB.logout()">Log out</a></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button>
+    </div>
+    <div class="navbar-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <div class="navbar-right">
+      <div class="avatar-placeholder">A</div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="home.html">Home</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Notifications</li></ol></nav>
+
+  <div class="page-header">
+      <h2>Notifications</h2>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="notif-mark-all" onclick="markAllRead()">Mark all as read</button>
+        <a href="home.html" class="btn-outline">Back to Home</a>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="notif-tabs">
+      <button class="notif-tab active" onclick="filterNotifs('all',   this)">All <span class="notif-count" id="count-all">5</span></button>
+      <button class="notif-tab"        onclick="filterNotifs('unread',this)">Unread <span class="notif-count" id="count-unread">2</span></button>
+      <button class="notif-tab"        onclick="filterNotifs('appointment',this)">Appointments</button>
+      <button class="notif-tab"        onclick="filterNotifs('message',this)">Messages</button>
+      <button class="notif-tab"        onclick="filterNotifs('billing',this)">Billing</button>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="notif-page-list" id="notifList">
+
+      <!-- TODAY -->
+      <div class="notif-date-label">Today</div>
+
+      <div class="notif-page-item unread" data-type="appointment" onclick="markRead(this)">
+        <div class="notif-page-dot teal"></div>
+        <div class="notif-page-icon">📅</div>
+        <div class="notif-page-body">
+          <div class="notif-page-top">
+            <h4>Appointment Request Submitted</h4>
+            <span class="notif-page-time">10:30 AM</span>
+          </div>
+          <p>Your appointment request with Dr. John Buena has been successfully submitted. We'll notify you once the clinic confirms your schedule.</p>
+          <div class="notif-page-actions">
+            <a href="appointments.html" class="notif-action-btn">View Appointment</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-page-item unread" data-type="message" onclick="markRead(this)">
+        <div class="notif-page-dot yellow"></div>
+        <div class="notif-page-icon">✉️</div>
+        <div class="notif-page-body">
+          <div class="notif-page-top">
+            <h4>New Message from Dr. John Buena</h4>
+            <span class="notif-page-time">9:15 AM</span>
+          </div>
+          <p>Dr. Buena has sent you a message regarding your upcoming follow-up appointment on February 10, 2026.</p>
+          <div class="notif-page-actions">
+            <a href="messages.html" class="notif-action-btn">Read Message</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- YESTERDAY -->
+      <div class="notif-date-label">Yesterday</div>
+
+      <div class="notif-page-item" data-type="appointment" onclick="markRead(this)">
+        <div class="notif-page-dot teal"></div>
+        <div class="notif-page-icon">✅</div>
+        <div class="notif-page-body">
+          <div class="notif-page-top">
+            <h4>Appointment Confirmed</h4>
+            <span class="notif-page-time">2:00 PM</span>
+          </div>
+          <p>Your appointment with Dr. John Buena on February 10, 2026 at 10:00 AM has been confirmed by the clinic.</p>
+          <div class="notif-page-actions">
+            <a href="appointment-detail.html" class="notif-action-btn">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-page-item" data-type="billing" onclick="markRead(this)">
+        <div class="notif-page-dot green"></div>
+        <div class="notif-page-icon">💳</div>
+        <div class="notif-page-body">
+          <div class="notif-page-top">
+            <h4>Payment Confirmed</h4>
+            <span class="notif-page-time">11:45 AM</span>
+          </div>
+          <p>Your payment of ₱2,300 via GCash for the Back Check Up appointment has been successfully processed. Transaction ID: TXN-88421.</p>
+          <div class="notif-page-actions">
+            <a href="appointment-detail.html" class="notif-action-btn">View Receipt</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- EARLIER -->
+      <div class="notif-date-label">January 2, 2026</div>
+
+      <div class="notif-page-item" data-type="appointment" onclick="markRead(this)">
+        <div class="notif-page-dot grey"></div>
+        <div class="notif-page-icon">🏥</div>
+        <div class="notif-page-body">
+          <div class="notif-page-top">
+            <h4>Appointment Completed</h4>
+            <span class="notif-page-time">11:05 AM</span>
+          </div>
+          <p>Your Back Check Up appointment with Dr. John Buena has been completed. You can now view your appointment details, doctor's notes, and prescription.</p>
+          <div class="notif-page-actions">
+            <a href="appointment-detail.html" class="notif-action-btn">View Summary</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state (hidden by default) -->
+      <div class="notif-empty" id="notifEmpty" style="display:none;">
+        <div class="notif-empty-icon">🔔</div>
+        <p>No notifications here</p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="inner-footer">
+    <p>© 2026 PrimeCare Medical Clinic. All rights reserved.</p>
+  </footer>
+
+  <script>
+    requireLogin();
+
+    function openDrawer()  { document.getElementById('sideDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('sideDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+
+    // Update unread count badge from real DB
+    var unreadCount = PrimeCareDB.getUnreadCount();
+    var countEl = document.getElementById('count-unread');
+    var countAllEl = document.getElementById('count-all');
+    if (countEl) countEl.textContent = unreadCount;
+    if (countAllEl) countAllEl.textContent = PrimeCareDB.getNotifications().length;
+
+    function markRead(el) {
+      el.classList.remove('unread');
+      const dot = el.querySelector('.notif-page-dot');
+      if (dot) dot.style.opacity = '0';
+      updateCounts();
+    }
+
+    function markAllRead() {
+      document.querySelectorAll('.notif-page-item.unread').forEach(function(el) {
+        el.classList.remove('unread');
+        const dot = el.querySelector('.notif-page-dot');
+        if (dot) dot.style.opacity = '0';
+      });
+      updateCounts();
+      showToast('info', 'All Caught Up!', 'All notifications marked as read.');
+    }
+
+    function updateCounts() {
+      const unread = document.querySelectorAll('.notif-page-item.unread').length;
+      const countEl = document.getElementById('count-unread');
+      if (countEl) {
+        countEl.textContent = unread;
+        countEl.style.display = unread === 0 ? 'none' : 'inline-flex';
+      }
+    }
+
+    function filterNotifs(type, btn) {
+      // Update active tab
+      document.querySelectorAll('.notif-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      const items = document.querySelectorAll('.notif-page-item');
+      const labels = document.querySelectorAll('.notif-date-label');
+      let visible = 0;
+
+      items.forEach(function(item) {
+        const itemType = item.getAttribute('data-type');
+        const show = type === 'all' ||
+                     (type === 'unread' && item.classList.contains('unread')) ||
+                     itemType === type;
+        item.style.display = show ? 'flex' : 'none';
+        if (show) visible++;
+      });
+
+      // Hide date labels that have no visible items after them
+      labels.forEach(function(label) {
+        let next = label.nextElementSibling;
+        let hasVisible = false;
+        while (next && !next.classList.contains('notif-date-label')) {
+          if (next.classList.contains('notif-page-item') && next.style.display !== 'none') {
+            hasVisible = true;
+          }
+          next = next.nextElementSibling;
+        }
+        label.style.display = hasVisible ? 'block' : 'none';
+      });
+
+      document.getElementById('notifEmpty').style.display = visible === 0 ? 'flex' : 'none';
+    }
+  </script>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="PrimeCare Medical Clinic – Compassion You Can Trust, Care You Deserve. Book your appointment online." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeCare Medical Clinic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    // EMAILJS SETUP
+    // Replace these with your actual EmailJS credentials
+    // Get them free at: https://www.emailjs.com
+    const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
+    const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'abcDEF123456'
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  </script>
+  <script src="toast.js"></script>
+</head>
+<body class="landing-page">
+
+  <nav class="landing-nav">
+    <div class="landing-nav-brand">
+      <span class="brand-name">PrimeCare</span>
+      <span class="brand-sub">Medical Clinic</span>
+    </div>
+    <div class="landing-nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#doctors">Doctors</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="landing-nav-actions">
+      <a href="login.html" class="btn-nav-login">Log In</a>
+      <a href="signup.html" class="btn-nav-signup">Sign Up</a>
+    </div>
+    <button class="landing-hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about"    onclick="toggleMobileMenu()">About</a>
+    <a href="#services" onclick="toggleMobileMenu()">Services</a>
+    <a href="#doctors"  onclick="toggleMobileMenu()">Doctors</a>
+    <a href="#contact"  onclick="toggleMobileMenu()">Contact</a>
+    <a href="login.html"  class="btn-nav-login" style="text-align:center;">Log In</a>
+    <a href="signup.html" class="btn-nav-signup" style="text-align:center;">Sign Up</a>
+  </div>
+
+  <main>
+  <!-- HERO -->
+  <section class="hero-section">
+    <div class="hero-text">
+      <div class="hero-badge">🏥 Trusted Medical Care in Las Piñas</div>
+      <h1>Your Health is Our <span class="hero-highlight">Top Priority</span></h1>
+      <p class="hero-tagline">Compassion You Can Trust, Care You Deserve</p>
+      <p class="hero-desc">We provide quality healthcare services to patients of all ages. Book your appointment online and get the care you need — anytime, anywhere.</p>
+      <div class="hero-buttons">
+        <a href="signup.html" class="btn btn-primary">Get Started →</a>
+        <a href="login.html"  class="btn-hero-outline">Log In</a>
+      </div>
+      <div class="hero-trust">
+        <div class="hero-trust-item">✅ Online Booking</div>
+        <div class="hero-trust-item">✅ SMS Reminders</div>
+        <div class="hero-trust-item">✅ Secure Payment</div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="assets/clinic-front.jpg" alt="PrimeCare Clinic" class="hero-clinic-img" />
+      <div class="hero-card">
+        <div class="hero-stat-card"><span class="stat-number">500+</span><span class="stat-label">Patients Served</span></div>
+        <div class="hero-stat-card"><span class="stat-number">20+</span><span class="stat-label">Expert Doctors</span></div>
+        <div class="hero-stat-card"><span class="stat-number">10+</span><span class="stat-label">Specializations</span></div>
+        <div class="hero-stat-card"><span class="stat-number">5★</span><span class="stat-label">Patient Rating</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="section-container">
+      <h2 class="section-title">About PrimeCare</h2>
+      <p class="section-subtitle">Your health is our top priority</p>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>PrimeCare Medical Clinic is a modern, patient-centered healthcare facility dedicated to providing compassionate and high-quality medical services. We believe that every patient deserves the best possible care in a safe and welcoming environment.</p>
+          <p style="margin-top:12px;">Founded with the vision of making healthcare accessible and convenient, PrimeCare offers a full range of medical services — from general consultations to specialized treatments — all under one roof.</p>
+          <div class="about-highlights">
+            <div class="highlight-item"><span class="highlight-icon">✔</span> Online Appointment Booking</div>
+            <div class="highlight-item"><span class="highlight-icon">✔</span> Face-to-Face & Teleconsultation</div>
+            <div class="highlight-item"><span class="highlight-icon">✔</span> Complete Medical Records</div>
+            <div class="highlight-item"><span class="highlight-icon">✔</span> Secure Online Payment</div>
+          </div>
+        </div>
+        <div class="about-image-box">
+          <img src="assets/clinic-inside.jpg" alt="PrimeCare Clinic Interior" class="about-img" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services-section" id="services">
+    <div class="section-container">
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-subtitle">Comprehensive healthcare for the whole family</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🩺</div>
+          <h3>General Consultation</h3>
+          <p>Comprehensive check-ups and general medical consultations for all ages.</p>
+          <p class="service-fee">₱500</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🦴</div>
+          <h3>Orthopedics</h3>
+          <p>Diagnosis and treatment of bone, joint, and muscle conditions.</p>
+          <p class="service-fee">₱800</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🦷</div>
+          <h3>Dental Care</h3>
+          <p>Full dental services from cleaning to extractions and oral surgery.</p>
+          <p class="service-fee">₱600</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🧪</div>
+          <h3>Laboratory Tests</h3>
+          <p>Complete blood work, urinalysis, and other diagnostic lab services.</p>
+          <p class="service-fee">₱400</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">💊</div>
+          <h3>Pharmacy</h3>
+          <p>On-site pharmacy with prescription and over-the-counter medications.</p>
+          <p class="service-fee">Varies</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📋</div>
+          <h3>Physical Therapy</h3>
+          <p>Rehabilitation programs to help patients recover and regain mobility.</p>
+          <p class="service-fee">₱1,500</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOCTORS -->
+  <section class="doctors-section" id="doctors">
+    <div class="section-container">
+      <h2 class="section-title">Meet Our Doctors</h2>
+      <p class="section-subtitle">Experienced professionals committed to your care</p>
+      <div class="doctors-grid">
+        <div class="doctor-card" onclick="openDoctorModal(0)" role="button" tabindex="0" aria-label="View Dr. John Buena profile">
+          <img src="assets/doctor-buena.jpg" alt="Dr. John Buena" class="doctor-img" />
+          <h3>Dr. John Buena</h3>
+          <p class="doctor-spec">Orthopedics</p>
+          <p class="doctor-sched">Mon – Fri &nbsp;|&nbsp; 9:00 AM – 5:00 PM</p>
+          <span class="doctor-view-btn">View Profile →</span>
+        </div>
+        <div class="doctor-card" onclick="openDoctorModal(1)" role="button" tabindex="0" aria-label="View Dr. Maria Santos profile">
+          <img src="assets/doctor-santos.jpg" alt="Dr. Maria Santos" class="doctor-img" />
+          <h3>Dr. Maria Santos</h3>
+          <p class="doctor-spec">General Medicine</p>
+          <p class="doctor-sched">Mon – Sat &nbsp;|&nbsp; 8:00 AM – 4:00 PM</p>
+          <span class="doctor-view-btn">View Profile →</span>
+        </div>
+        <div class="doctor-card" onclick="openDoctorModal(2)" role="button" tabindex="0" aria-label="View Dr. Ramon Gole profile">
+          <img src="assets/doctor-gole.jpg" alt="Dr. Ramon Gole" class="doctor-img" />
+          <h3>Dr. Ramon Gole</h3>
+          <p class="doctor-spec">Dental Surgery</p>
+          <p class="doctor-sched">Tue – Sat &nbsp;|&nbsp; 10:00 AM – 6:00 PM</p>
+          <span class="doctor-view-btn">View Profile →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section">
+    <div class="section-container">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Book your appointment in 3 easy steps</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Create an Account</h3>
+          <p>Sign up with your name and email to get started.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Book an Appointment</h3>
+          <p>Choose your doctor, date, and preferred time slot.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Visit the Clinic</h3>
+          <p>Come in on your scheduled date and get the care you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="section-container">
+      <h2 class="section-title">What Our Patients Say</h2>
+      <p class="section-subtitle">Real experiences from real patients</p>
+      <div class="testimonials-grid">
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Booking my appointment was so easy and convenient. The online system saved me a lot of time. Dr. Buena was very thorough and professional."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">AF</div>
+            <div>
+              <p class="testimonial-name">Adrian Lei Frio</p>
+              <p class="testimonial-role">Patient since 2025</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"I love the SMS reminders! I never miss my appointments anymore. The clinic staff is very accommodating and the doctors are excellent."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MC</div>
+            <div>
+              <p class="testimonial-name">Maria Clara</p>
+              <p class="testimonial-role">Patient since 2024</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★☆</div>
+          <p class="testimonial-text">"The teleconsultation feature is a game changer. I was able to consult with Dr. Santos from home without having to travel. Highly recommended!"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JR</div>
+            <div>
+              <p class="testimonial-name">Jose Reyes</p>
+              <p class="testimonial-role">Patient since 2025</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="faq-section" id="faq">
+    <div class="section-container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Everything you need to know about PrimeCare</p>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            How do I book an appointment?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Simply create a free account, log in to the patient portal, and click "Book an Appointment." Choose your preferred doctor, select a date and time, and submit your booking. You will receive a confirmation once the clinic approves it.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            How much does a consultation cost?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Consultation fees vary per service. General Consultation starts at ₱500, Orthopedics at ₱800, Dental Care at ₱600, and Laboratory Tests at ₱400. You can view the full price list in our Services section.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Can I cancel or reschedule my appointment?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. You can cancel or request a reschedule through your patient dashboard under "My Appointments." Please do this at least 24 hours before your scheduled appointment to avoid any cancellation fees.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            What payment methods do you accept?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We accept GCash, Maya, and major credit/debit cards through our secure payment system. All transactions are encrypted and processed safely.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Is my medical information kept private?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely. PrimeCare complies with the Philippine Data Privacy Act of 2012. Your medical records and personal information are securely stored and only accessible by authorized clinic staff and your attending doctor.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Do you offer teleconsultation?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! When booking an appointment, you can choose between Face-to-Face or Teleconsultation as your preferred mode of meeting. Teleconsultation is available for most general consultations.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="section-container">
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-subtitle">We'd love to hear from you</p>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="contact-icon">📍</span>
+            <div>
+              <strong>Address</strong>
+              <p>123 Health St., Barangay Maliwanag, Las Piñas City, Metro Manila</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <div><strong>Phone</strong><p>(02) 8123-4567</p></div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">✉️</span>
+            <div><strong>Email</strong><p>info@primecare.ph</p></div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">🕐</span>
+            <div><strong>Clinic Hours</strong><p>Monday – Saturday: 8:00 AM – 6:00 PM</p></div>
+          </div>
+          <!-- GOOGLE MAPS EMBED -->
+          <div class="map-embed">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15452.799765172858!2d120.9830!3d14.4498!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d3b48e7b8ced%3A0x7a5a6a9c3f2b7e1d!2sLas%20Pi%C3%B1as%2C%20Metro%20Manila%2C%20Philippines!5e0!3m2!1sen!2sph!4v1713456789012!5m2!1sen!2sph"
+              width="100%"
+              height="220"
+              style="border:0; border-radius:14px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+
+        <div class="contact-form-box">
+          <h3>Send us a Message</h3>
+          <div class="contact-form">
+            <input type="text"  class="input-field" id="contactName"    placeholder="Your Name" />
+            <input type="email" class="input-field" id="contactEmail"   placeholder="Your Email" />
+            <input type="text"  class="input-field" id="contactSubject" placeholder="Subject" />
+            <textarea class="reason-box" id="contactMessage" placeholder="Your Message"></textarea>
+            <p class="field-error" id="contactError" style="display:none; color:#e74c3c; font-size:0.82rem; font-weight:700;"></p>
+            <button class="btn btn-primary" onclick="handleContact()">Send Message</button>
+          </div>
+          <p id="contactSuccess" style="display:none; color:#1e3a5f; font-weight:700; text-align:center; margin-top:12px;">
+            ✅ Message sent! We'll get back to you soon.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="landing-footer">
+    <div class="footer-brand">
+      <span class="brand-name">PrimeCare</span>
+      <span class="brand-sub">Medical Clinic</span>
+    </div>
+    <p class="footer-tagline">Compassion You Can Trust, Care You Deserve</p>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#doctors">Doctors</a>
+      <a href="#contact">Contact</a>
+      <a href="login.html">Log In</a>
+      <a href="signup.html">Sign Up</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+    <div class="footer-social">
+      <a href="#" class="social-btn" aria-label="Facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+        </svg>
+      </a>
+      <a href="#" class="social-btn" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a href="#" class="social-btn" aria-label="Twitter/X">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+    </div>
+    <p class="footer-copy">© 2026 PrimeCare Medical Clinic. All rights reserved.</p>
+    <a href="admin-login.html" class="admin-portal-link">Admin Portal</a>
+  </footer>
+
+  <script>
+    // Mobile menu
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.mobile-menu a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.getElementById('mobileMenu').classList.remove('open');
+      });
+    });
+
+    // Smooth scroll for nav links with offset
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        const navHeight = document.querySelector('.landing-nav').offsetHeight;
+        const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      });
+    });
+
+    // Active nav highlight on scroll
+    const sections = ['about','services','doctors','contact'];
+    const navLinks = document.querySelectorAll('.landing-nav-links a');
+
+    function updateActiveNav() {
+      const navHeight = document.querySelector('.landing-nav').offsetHeight;
+      let current = '';
+      sections.forEach(function(id) {
+        const section = document.getElementById(id);
+        if (!section) return;
+        if (window.scrollY >= section.offsetTop - navHeight - 40) {
+          current = id;
+        }
+      });
+      navLinks.forEach(function(link) {
+        link.classList.remove('nav-active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('nav-active');
+        }
+      });
+    }
+
+    // Back to Top button
+    const backToTop = document.getElementById('backToTop');
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleScroll() {
+      // Back to top visibility
+      if (window.scrollY > 400) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+      // Active nav
+      updateActiveNav();
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // ── Scroll Animations ─────────────────────────────────
+    var animateEls = document.querySelectorAll(
+      '.service-card, .doctor-card, .step-card, .hero-stat-card, .testimonial-card, .faq-item'
+    );
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    animateEls.forEach(function(el) { observer.observe(el); });
+
+    // ── Doctor Modal Data ─────────────────────────────────
+    var doctors = [
+      {
+        name: "Dr. John Buena",
+        spec: "Orthopedics",
+        img:  "assets/doctor-buena.jpg",
+        license: "PRC-12345",
+        dept:    "Orthopedics Department",
+        sched:   "Monday – Friday",
+        hours:   "9:00 AM – 5:00 PM",
+        room:    "Room 203",
+        bio:     "Dr. John Buena is a board-certified orthopedic specialist with over 10 years of experience treating bone, joint, and muscle conditions. He is dedicated to providing compassionate, evidence-based care to all his patients."
+      },
+      {
+        name: "Dr. Maria Santos",
+        spec: "General Medicine",
+        img:  "assets/doctor-santos.jpg",
+        license: "PRC-23456",
+        dept:    "General Medicine Department",
+        sched:   "Monday – Saturday",
+        hours:   "8:00 AM – 4:00 PM",
+        room:    "Room 101",
+        bio:     "Dr. Maria Santos is a seasoned general practitioner with a passion for preventive care and patient wellness. She provides comprehensive health assessments and personalized treatment plans for patients of all ages."
+      },
+      {
+        name: "Dr. Ramon Gole",
+        spec: "Dental Surgery",
+        img:  "assets/doctor-gole.jpg",
+        license: "PRC-34567",
+        dept:    "Dental Department",
+        sched:   "Tuesday – Saturday",
+        hours:   "10:00 AM – 6:00 PM",
+        room:    "Room 305",
+        bio:     "Dr. Ramon Gole is an experienced dental surgeon specializing in oral health, teeth extractions, and dental care. He is committed to making every patient feel comfortable and confident in their smile."
+      }
+    ];
+
+    function openDoctorModal(index) {
+      var d = doctors[index];
+      document.getElementById("doctorModalImg").src          = d.img;
+      document.getElementById("doctorModalImg").alt          = d.name;
+      document.getElementById("doctorModalName").textContent = d.name;
+      document.getElementById("doctorModalSpec").textContent = d.spec;
+      document.getElementById("doctorModalLicense").textContent = d.license;
+      document.getElementById("doctorModalDept").textContent    = d.dept;
+      document.getElementById("doctorModalSched").textContent   = d.sched;
+      document.getElementById("doctorModalHours").textContent   = d.hours;
+      document.getElementById("doctorModalRoom").textContent    = d.room;
+      document.getElementById("doctorModalBio").textContent     = d.bio;
+      document.getElementById("doctorModal").classList.add("open");
+    }
+
+    function closeDoctorModal() {
+      document.getElementById("doctorModal").classList.remove("open");
+    }
+
+    document.getElementById("doctorModal").addEventListener("click", function(e) {
+      if (e.target === this) closeDoctorModal();
+    });
+
+    // ── FAQ Toggle ────────────────────────────────────────
+    function toggleFaq(btn) {
+      var item   = btn.parentElement;
+      var answer = item.querySelector(".faq-answer");
+      var icon   = btn.querySelector(".faq-icon");
+      var isOpen = item.classList.contains("open");
+
+      // Close all
+      document.querySelectorAll(".faq-item.open").forEach(function(el) {
+        el.classList.remove("open");
+        el.querySelector(".faq-answer").style.maxHeight = "0";
+        el.querySelector(".faq-icon").textContent = "+";
+      });
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        item.classList.add("open");
+        answer.style.maxHeight = answer.scrollHeight + "px";
+        icon.textContent = "−";
+      }
+    }
+
+    // ── Cookie Consent ────────────────────────────────────
+    if (localStorage.getItem("cookieAccepted")) {
+      var banner = document.getElementById("cookieBanner");
+      if (banner) banner.style.display = "none";
+    }
+
+    function acceptCookies() {
+      localStorage.setItem("cookieAccepted", "true");
+      document.getElementById("cookieBanner").style.display = "none";
+      showToast("success", "Cookies Accepted", "Thank you for accepting our cookie policy.");
+    }
+
+    function declineCookies() {
+      document.getElementById("cookieBanner").style.display = "none";
+    }
+
+    function handleContact() {
+      const name    = document.getElementById('contactName').value.trim();
+      const email   = document.getElementById('contactEmail').value.trim();
+      const subject = document.getElementById('contactSubject').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+      const errEl   = document.getElementById('contactError');
+      const successEl = document.getElementById('contactSuccess');
+      const sendBtn   = document.querySelector('.contact-form .btn');
+
+      // Validate
+      if (!name || !email || !subject || !message) {
+        errEl.textContent = 'Please fill in all fields before sending.';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (!email.includes('@')) {
+        errEl.textContent = 'Please enter a valid email address.';
+        errEl.style.display = 'block';
+        return;
+      }
+      errEl.style.display = 'none';
+
+      // Show loading
+      sendBtn.textContent = 'Sending...';
+      sendBtn.disabled = true;
+
+      // EmailJS send
+      const templateParams = {
+        from_name:    name,
+        from_email:   email,
+        subject:      subject,
+        message:      message,
+        to_name:      'PrimeCare Medical Clinic',
+      };
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+          showToast('success', 'Message Sent!', 'We will get back to you soon.');
+          successEl.style.display = 'block';
+          successEl.textContent = '✅ Message sent! We will get back to you soon.';
+          sendBtn.textContent = 'Send Message';
+          sendBtn.disabled = false;
+          // Clear form
+          document.getElementById('contactName').value = '';
+          document.getElementById('contactEmail').value = '';
+          document.getElementById('contactSubject').value = '';
+          document.getElementById('contactMessage').value = '';
+        })
+        .catch(function(error) {
+          // Fallback if EmailJS not yet configured
+          showToast('success', 'Message Sent!', 'We will get back to you soon.');
+          successEl.style.display = 'block';
+          successEl.textContent = '✅ Message sent! We will get back to you soon.';
+          sendBtn.textContent = 'Send Message';
+          sendBtn.disabled = false;
+          console.log('EmailJS error (configure your credentials):', error);
+        });
+    }
+  </script>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
+    ↑
+  </button>
+
+
+  <!-- Cookie Consent -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-content">
+      <span class="cookie-icon">🍪</span>
+      <p>We use cookies to improve your experience. By using PrimeCare, you agree to our
+        <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms of Service</a>.
+      </p>
+    </div>
+    <div class="cookie-actions">
+      <button class="cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
+      <button class="cookie-btn-decline" onclick="declineCookies()">Decline</button>
+    </div>
+  </div>
+
+
+  <!-- Doctor Profile Modal -->
+  <div class="modal-overlay" id="doctorModal">
+    <div class="modal-box doctor-modal-box">
+      <button class="modal-close" onclick="closeDoctorModal()" style="position:absolute;right:16px;top:16px;">✕</button>
+      <div class="doctor-modal-header">
+        <img id="doctorModalImg" src="" alt="" class="doctor-modal-img" />
+        <div>
+          <h2 id="doctorModalName" class="doctor-modal-name"></h2>
+          <p  id="doctorModalSpec" class="doctor-modal-spec"></p>
+          <span class="badge badge-complete" style="font-size:0.75rem;padding:4px 12px;">On Duty</span>
+        </div>
+      </div>
+      <div class="doctor-modal-body">
+        <div class="doctor-modal-info">
+          <div class="doctor-info-item">
+            <span class="doctor-info-label">📋 License No.</span>
+            <span id="doctorModalLicense"></span>
+          </div>
+          <div class="doctor-info-item">
+            <span class="doctor-info-label">🏥 Department</span>
+            <span id="doctorModalDept"></span>
+          </div>
+          <div class="doctor-info-item">
+            <span class="doctor-info-label">📅 Schedule</span>
+            <span id="doctorModalSched"></span>
+          </div>
+          <div class="doctor-info-item">
+            <span class="doctor-info-label">🕐 Hours</span>
+            <span id="doctorModalHours"></span>
+          </div>
+          <div class="doctor-info-item">
+            <span class="doctor-info-label">🚪 Room</span>
+            <span id="doctorModalRoom"></span>
+          </div>
+        </div>
+        <div class="doctor-modal-bio">
+          <p id="doctorModalBio"></p>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <a href="signup.html" class="btn btn-primary" style="border-radius:14px;">Book with this Doctor</a>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Book a new appointment at PrimeCare Medical Clinic." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeCare – Book Appointment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="book-page">
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="sideDrawer">
+    <div class="drawer-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="appointments.html">Appointments</a></li>
+      <li><a href="messages.html">Messages</a></li>
+      <li><a href="settings.html">Settings</a></li>
+    </ul>
+    <div class="drawer-logout"><a href="index.html" onclick="PrimeCareDB.logout()">Log out</a></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button>
+    </div>
+    <div class="navbar-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <div class="navbar-right">
+      <a href="notifications.html" class="nav-icon" style="position:relative;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span class="notif-badge">2</span>
+      </a>
+      <div class="avatar-placeholder">A</div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="home.html">Home</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item"><a href="appointments.html">Appointments</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Book Appointment</li></ol></nav>
+  <!-- STEP INDICATOR -->
+  <div class="step-indicator">
+    <div class="step-item active" id="step-ind-1">
+      <div class="step-circle">1</div>
+      <span>Appointment</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item" id="step-ind-2">
+      <div class="step-circle">2</div>
+      <span>Payment</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item" id="step-ind-3">
+      <div class="step-circle">3</div>
+      <span>Confirm</span>
+    </div>
+  </div>
+
+  <div class="book-body">
+
+    <!-- STEP 1: APPOINTMENT FORM -->
+    <div class="book-card" id="step1">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+        <a href="home.html" style="background:none;border:none;font-size:1.6rem;font-weight:900;color:#1e3a5f;cursor:pointer;text-decoration:none;line-height:1;">‹</a>
+        <div style="flex:1;text-align:center;">
+          <p class="form-title">Your Appointment</p>
+          <p class="form-sub">Enter your appointment details</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Title</label>
+        <input type="text" class="input-field" id="apptTitle" placeholder="Title of the Appointment" />
+      </div>
+      <div class="form-row">
+        <label>PTM</label>
+        <input type="text" class="input-field" id="apptPTM" placeholder="Name of Person to Meet" />
+      </div>
+      <div class="form-row">
+        <label>Date</label>
+        <input type="date" class="input-field" id="apptDate" />
+      </div>
+      <div class="form-row">
+        <label>Time</label>
+        <div class="time-inputs">
+          <input type="time" class="input-field" id="apptStart" />
+          <span class="time-dash">-</span>
+          <input type="time" class="input-field" id="apptEnd" />
+        </div>
+      </div>
+      <div class="form-row">
+        <label>MoM</label>
+        <select class="input-field" id="apptMode">
+          <option value="" disabled selected>Mode of Meeting</option>
+          <option value="Face-to-Face">Face-to-Face</option>
+          <option value="Teleconsultation">Teleconsultation</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Service</label>
+        <select class="input-field" id="apptService">
+          <option value="" disabled selected>Select a Service</option>
+          <option value="General Consultation|500">General Consultation — ₱500</option>
+          <option value="Orthopedics|800">Orthopedics — ₱800</option>
+          <option value="Dental Care|600">Dental Care — ₱600</option>
+          <option value="Laboratory Tests|400">Laboratory Tests — ₱400</option>
+          <option value="Physical Therapy|1500">Physical Therapy — ₱1,500</option>
+        </select>
+      </div>
+      <textarea class="reason-box" id="apptReason" placeholder="Reason for Visit"></textarea>
+      <p class="field-error" id="step1Error" style="display:none; color:#e74c3c; font-size:0.82rem; font-weight:700; text-align:center; margin-bottom:8px;"></p>
+      <div class="form-submit-row">
+        <button class="btn btn-white book-btn-next" onclick="goToPayment()">Next: Payment →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: PAYMENT FORM -->
+    <div class="book-card" id="step2" style="display:none;">
+      <div style="text-align:center; margin-bottom:20px;">
+        <p class="form-title">Payment Details</p>
+        <p class="form-sub">Secure online payment powered by Stripe</p>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="payment-summary" id="paymentSummary"></div>
+
+      <!-- Card Details -->
+      <div class="payment-form">
+        <p class="payment-section-label">Card Information</p>
+
+        <div class="input-group" style="margin-bottom:12px;">
+          <input type="text" class="input-field" id="cardName" placeholder="Cardholder Name" />
+        </div>
+
+        <div class="card-number-row input-group" style="margin-bottom:12px;">
+          <input type="text" class="input-field" id="cardNumber" placeholder="Card Number" maxlength="19" oninput="formatCard(this)" />
+          <span class="card-type-icon" id="cardTypeIcon">💳</span>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-bottom:12px;">
+          <input type="text" class="input-field" id="cardExpiry" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)" style="flex:1;" />
+          <input type="text" class="input-field" id="cardCVV" placeholder="CVV" maxlength="3" style="flex:1;" />
+        </div>
+
+        <p class="payment-section-label" style="margin-top:8px;">Or pay with</p>
+        <div class="alt-payment-row">
+          <button class="alt-pay-btn" onclick="selectAltPay('GCash')" id="altGcash">📱 GCash</button>
+          <button class="alt-pay-btn" onclick="selectAltPay('Maya')"  id="altMaya">💜 Maya</button>
+        </div>
+        <p id="altPaySelected" style="display:none; font-size:0.82rem; font-weight:700; color:#1e3a5f; text-align:center; margin-top:8px;"></p>
+      </div>
+
+      <p class="field-error" id="step2Error" style="display:none; color:#e74c3c; font-size:0.82rem; font-weight:700; text-align:center; margin:8px 0;"></p>
+
+      <div class="book-btn-row">
+        <button class="btn btn-hero-outline book-btn-back" onclick="goBack()">← Back</button>
+        <button class="btn btn-white book-btn-next" onclick="goToConfirm()">Review & Confirm →</button>
+      </div>
+
+      <p style="font-size:0.75rem; color:#1e3a5f; text-align:center; margin-top:10px; opacity:0.7;">
+        🔒 Your payment is secured and encrypted
+      </p>
+    </div>
+
+    <!-- STEP 3: CONFIRMATION -->
+    <div class="book-card" id="step3" style="display:none;">
+      <div style="text-align:center; margin-bottom:20px;">
+        <p class="form-title" style="font-style:italic;">Appointment Confirmation</p>
+        <p class="form-sub">Please review your details before confirming</p>
+      </div>
+
+      <div class="confirm-details" id="confirmDetails"></div>
+
+      <div class="book-btn-row">
+        <button class="btn btn-hero-outline book-btn-back" onclick="backToPayment()">← Back</button>
+        <button class="btn btn-white book-btn-next" onclick="confirmAppointment()">Confirm Appointment ✓</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-box" style="text-align:center;">
+      <div style="position:relative; display:flex; justify-content:center; align-items:center; margin-bottom:16px;">
+        <h3 style="font-style:italic; font-size:1.2rem; font-weight:900; color:#1e3a5f;">Appointment Successful ✅</h3>
+        <button class="modal-close" onclick="closeModal('successModal')" style="position:absolute; right:0;">✕</button>
+      </div>
+      <p style="font-size:0.9rem; color:#4a6fa5; font-weight:600; line-height:1.7; margin-bottom:12px;">
+        Your appointment has been confirmed.<br/>Please wait for the clinic's confirmation.
+      </p>
+
+      <!-- SMS Notification UI -->
+      <div class="sms-notification-box">
+        <div class="sms-header">
+          <span>📱</span>
+          <span style="font-weight:800; color:#1e3a5f; font-size:0.88rem;">SMS Notification Sent</span>
+          <span style="margin-left:auto; font-size:0.75rem; color:#4a6fa5;">via Twilio</span>
+        </div>
+        <div class="sms-bubble">
+          <p id="smsText"></p>
+        </div>
+        <p style="font-size:0.72rem; color:#4a6fa5; margin-top:6px; font-weight:600;">Sent to: +63 9XX XXX XXXX</p>
+      </div>
+
+      <!-- Payment Receipt -->
+      <div class="payment-receipt" id="paymentReceipt"></div>
+
+      <div class="success-btn-row">
+        <a href="home.html"         class="btn btn-primary">Back to Home</a>
+        <a href="appointments.html" class="btn btn-hero-outline">Appointments</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- INNER PAGE FOOTER -->
+  </main>
+
+  <footer class="inner-footer">
+    <p>© 2026 PrimeCare Medical Clinic. All rights reserved.</p>
+  </footer>
+
+  <script>
+    requireLogin();
+
+    function openDrawer()  { document.getElementById('sideDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('sideDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+    function openModal(id)  { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    document.querySelectorAll('.modal-overlay').forEach(function(o) {
+      o.addEventListener('click', function(e) { if (e.target === o) closeModal(o.id); });
+    });
+
+    // Step navigation
+    function setStep(n) {
+      ['step1','step2','step3'].forEach(function(id, i) {
+        document.getElementById(id).style.display = (i+1 === n) ? 'block' : 'none';
+      });
+      ['step-ind-1','step-ind-2','step-ind-3'].forEach(function(id, i) {
+        document.getElementById(id).classList.toggle('active', i+1 <= n);
+      });
+      window.scrollTo(0,0);
+    }
+
+    function formatTime(t) {
+      if (!t) return '--';
+      const [h, m] = t.split(':');
+      const hour = parseInt(h);
+      return (hour % 12 || 12) + ':' + m + ' ' + (hour >= 12 ? 'PM' : 'AM');
+    }
+
+    function formatCard(el) {
+      let v = el.value.replace(/\D/g,'').substring(0,16);
+      el.value = v.match(/.{1,4}/g)?.join(' ') || v;
+      const icon = document.getElementById('cardTypeIcon');
+      icon.textContent = v.startsWith('4') ? '💳 Visa' : v.startsWith('5') ? '💳 MC' : '💳';
+    }
+
+    function formatExpiry(el) {
+      let v = el.value.replace(/\D/g,'').substring(0,4);
+      if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+      el.value = v;
+    }
+
+    let selectedAltPay = '';
+    function selectAltPay(method) {
+      selectedAltPay = method;
+      document.getElementById('altPaySelected').style.display = 'block';
+      document.getElementById('altPaySelected').textContent = '✅ ' + method + ' selected as payment method';
+      document.getElementById('altGcash').style.borderColor = method === 'GCash' ? '#1e3a5f' : '#c8e6e6';
+      document.getElementById('altMaya').style.borderColor  = method === 'Maya'  ? '#1e3a5f' : '#c8e6e6';
+    }
+
+    // Booking data storage
+    let bookingData = {};
+
+    function goToPayment() {
+      const title   = document.getElementById('apptTitle').value.trim();
+      const ptm     = document.getElementById('apptPTM').value.trim();
+      const date    = document.getElementById('apptDate').value;
+      const start   = document.getElementById('apptStart').value;
+      const end     = document.getElementById('apptEnd').value;
+      const mode    = document.getElementById('apptMode').value;
+      const service = document.getElementById('apptService').value;
+      const reason  = document.getElementById('apptReason').value.trim();
+      const errEl   = document.getElementById('step1Error');
+
+      if (!title || !ptm || !date || !start || !end || !mode || !service) {
+        errEl.textContent = 'Please fill in all required fields.';
+        errEl.style.display = 'block';
+        return;
+      }
+      errEl.style.display = 'none';
+
+      const [serviceName, fee] = service.split('|');
+      const dateFormatted = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+      bookingData = { title, ptm, date: dateFormatted, start: formatTime(start), end: formatTime(end), mode, serviceName, fee, reason };
+
+      document.getElementById('paymentSummary').innerHTML =
+        '<div class="summary-box">' +
+        '<p class="summary-label">Appointment Summary</p>' +
+        '<table class="summary-table">' +
+        '<tr><td>Service</td><td><strong>' + serviceName + '</strong></td></tr>' +
+        '<tr><td>Doctor</td><td>' + ptm + '</td></tr>' +
+        '<tr><td>Date</td><td>' + dateFormatted + '</td></tr>' +
+        '<tr><td>Time</td><td>' + formatTime(start) + ' – ' + formatTime(end) + '</td></tr>' +
+        '<tr class="total-row"><td>Total</td><td><strong>₱' + parseInt(fee).toLocaleString() + '</strong></td></tr>' +
+        '</table>' +
+        '</div>';
+
+      setStep(2);
+    }
+
+    function goBack() { setStep(1); }
+    function backToPayment() { setStep(2); }
+
+    function goToConfirm() {
+      const cardName   = document.getElementById('cardName').value.trim();
+      const cardNumber = document.getElementById('cardNumber').value.trim();
+      const expiry     = document.getElementById('cardExpiry').value.trim();
+      const cvv        = document.getElementById('cardCVV').value.trim();
+      const errEl      = document.getElementById('step2Error');
+
+      const hasCard = cardName && cardNumber && expiry && cvv;
+      const hasAlt  = selectedAltPay !== '';
+
+      if (!hasCard && !hasAlt) {
+        errEl.textContent = 'Please enter your card details or select GCash / Maya.';
+        errEl.style.display = 'block';
+        return;
+      }
+      errEl.style.display = 'none';
+
+      bookingData.payMethod = hasAlt ? selectedAltPay : 'Card (**** ' + cardNumber.slice(-4) + ')';
+
+      document.getElementById('confirmDetails').innerHTML =
+        '<table class="confirm-table">' +
+        '<tr><td>Appointment</td><td><strong>' + bookingData.title + '</strong></td></tr>' +
+        '<tr><td>Doctor</td><td>' + bookingData.ptm + '</td></tr>' +
+        '<tr><td>Service</td><td>' + bookingData.serviceName + '</td></tr>' +
+        '<tr><td>Date</td><td>' + bookingData.date + '</td></tr>' +
+        '<tr><td>Time</td><td>' + bookingData.start + ' – ' + bookingData.end + '</td></tr>' +
+        '<tr><td>Mode</td><td>' + bookingData.mode + '</td></tr>' +
+        '<tr><td>Payment</td><td>' + bookingData.payMethod + '</td></tr>' +
+        '<tr class="total-row"><td>Total</td><td><strong>₱' + parseInt(bookingData.fee).toLocaleString() + '</strong></td></tr>' +
+        '</table>';
+
+      setStep(3);
+    }
+
+    function confirmAppointment() {
+      showToast('success','Appointment Booked!','Your appointment has been submitted successfully.');
+
+      // Save to real DB
+      var appt = PrimeCareDB.addAppointment({
+        title:     bookingData.title,
+        doctor:    bookingData.ptm,
+        service:   bookingData.serviceName,
+        date:      bookingData.date,
+        startTime: bookingData.start,
+        endTime:   bookingData.end,
+        mode:      bookingData.mode,
+        reason:    document.getElementById('apptReason').value.trim(),
+        fee:       parseInt(bookingData.fee),
+        payMethod: bookingData.payMethod,
+      });
+
+      // Add notification
+      PrimeCareDB.addNotification(
+        'appointment',
+        'Appointment Request Submitted',
+        'Your appointment for ' + bookingData.title + ' with ' + bookingData.ptm + ' on ' + bookingData.date + ' has been submitted.'
+      );
+      // SMS UI
+      document.getElementById('smsText').textContent =
+        'Hi! Your appointment for ' + bookingData.title + ' with ' + bookingData.ptm +
+        ' on ' + bookingData.date + ' at ' + bookingData.start +
+        ' has been submitted. Please wait for confirmation. - PrimeCare Clinic';
+
+      // Payment receipt
+      document.getElementById('paymentReceipt').innerHTML =
+        '<div class="receipt-box">' +
+        '<p class="receipt-label">💳 Payment Receipt</p>' +
+        '<table class="summary-table">' +
+        '<tr><td>Service</td><td>' + bookingData.serviceName + '</td></tr>' +
+        '<tr><td>Amount Paid</td><td><strong>₱' + parseInt(bookingData.fee).toLocaleString() + '</strong></td></tr>' +
+        '<tr><td>Method</td><td>' + bookingData.payMethod + '</td></tr>' +
+        '<tr><td>Status</td><td><span style="color:#27ae60; font-weight:800;">✅ Paid</span></td></tr>' +
+        '<tr><td>Transaction ID</td><td>TXN-' + Math.floor(Math.random()*90000+10000) + '</td></tr>' +
+        '</table>' +
+        '</div>';
+
+      openModal('successModal');
+    }
+  </script>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>

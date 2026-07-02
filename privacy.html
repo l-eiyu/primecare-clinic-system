@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Privacy Policy – PrimeCare Medical Clinic" />
+  <title>PrimeCare – Privacy Policy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="toast.js"></script>
+</head>
+<body class="legal-page">
+
+  <nav class="landing-nav">
+    <div class="landing-nav-brand">
+      <span class="brand-name">PrimeCare</span>
+      <span class="brand-sub">Medical Clinic</span>
+    </div>
+    <div class="landing-nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#doctors">Doctors</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="landing-nav-actions">
+      <a href="login.html"  class="btn-nav-login">Log In</a>
+      <a href="signup.html" class="btn-nav-signup">Sign Up</a>
+    </div>
+    <button class="landing-hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#about"    onclick="toggleMobileMenu()">About</a>
+    <a href="index.html#services" onclick="toggleMobileMenu()">Services</a>
+    <a href="index.html#doctors"  onclick="toggleMobileMenu()">Doctors</a>
+    <a href="index.html#contact"  onclick="toggleMobileMenu()">Contact</a>
+    <a href="login.html"  class="btn-nav-login" style="text-align:center;">Log In</a>
+    <a href="signup.html" class="btn-nav-signup" style="text-align:center;">Sign Up</a>
+  </div>
+
+  <main class="legal-main">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="index.html">Home</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Privacy Policy</li></ol></nav>
+
+    <div class="legal-header">
+      <h1>Privacy Policy</h1>
+      <p>Last updated: January 1, 2026</p>
+    </div>
+
+    <div class="legal-container">
+
+      <div class="legal-toc">
+        <h3>Table of Contents</h3>
+        <ol>
+          <li><a href="#collection">Information We Collect</a></li>
+          <li><a href="#use">How We Use Your Information</a></li>
+          <li><a href="#sharing">Information Sharing</a></li>
+          <li><a href="#security">Data Security</a></li>
+          <li><a href="#retention">Data Retention</a></li>
+          <li><a href="#rights">Your Rights</a></li>
+          <li><a href="#cookies">Cookies</a></li>
+          <li><a href="#aws">Cloud Storage (AWS)</a></li>
+          <li><a href="#children">Children's Privacy</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ol>
+      </div>
+
+      <div class="legal-body">
+
+        <div class="legal-highlight" style="margin-bottom:24px;">
+          <p>🔒 PrimeCare Medical Clinic is committed to protecting your personal and medical information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our services.</p>
+        </div>
+
+        <section class="legal-section" id="collection">
+          <h2>1. Information We Collect</h2>
+          <p>We collect the following types of information:</p>
+          <ul class="legal-list">
+            <li><strong>Personal Information</strong> — Full name, date of birth, contact number, email address, and home address</li>
+            <li><strong>Medical Information</strong> — Blood type, allergies, reason for visit, doctor's notes, prescriptions, and diagnosis</li>
+            <li><strong>Account Information</strong> — Username, encrypted password, and account activity</li>
+            <li><strong>Payment Information</strong> — Transaction records (we do not store full card numbers)</li>
+            <li><strong>Usage Data</strong> — Pages visited, features used, and appointment history</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" id="use">
+          <h2>2. How We Use Your Information</h2>
+          <p>We use your information to:</p>
+          <ul class="legal-list">
+            <li>Process and manage your appointment bookings</li>
+            <li>Send appointment confirmations, reminders, and updates via SMS and email</li>
+            <li>Maintain your medical records and appointment history</li>
+            <li>Process payments for consultations and services</li>
+            <li>Improve our platform and services</li>
+            <li>Comply with legal and regulatory requirements</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" id="sharing">
+          <h2>3. Information Sharing</h2>
+          <p>We do not sell or rent your personal information. We may share your data with:</p>
+          <ul class="legal-list">
+            <li><strong>Clinic Doctors and Staff</strong> — To provide medical care and manage appointments</li>
+            <li><strong>Payment Processors</strong> — Stripe, GCash, and Maya for secure payment processing</li>
+            <li><strong>SMS Providers</strong> — Twilio for appointment reminders</li>
+            <li><strong>Cloud Services</strong> — AWS for secure data storage and hosting</li>
+            <li><strong>Legal Authorities</strong> — When required by law or court order</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" id="security">
+          <h2>4. Data Security</h2>
+          <p>We implement multiple layers of security to protect your data:</p>
+          <ul class="legal-list">
+            <li>HTTPS encryption for all data transmission</li>
+            <li>AWS Certificate Manager for SSL/TLS certificates</li>
+            <li>AWS IAM for strict access control</li>
+            <li>Encrypted storage for sensitive medical information</li>
+            <li>Regular security audits and monitoring via AWS CloudWatch</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" id="retention">
+          <h2>5. Data Retention</h2>
+          <p>We retain your personal and medical data for as long as your account is active and as required by Philippine medical record-keeping regulations. Upon account deletion, your data will be anonymized or deleted within 30 days, except where retention is required by law.</p>
+        </section>
+
+        <section class="legal-section" id="rights">
+          <h2>6. Your Rights</h2>
+          <p>Under the Philippine Data Privacy Act of 2012 (Republic Act 10173), you have the right to:</p>
+          <ul class="legal-list">
+            <li><strong>Access</strong> — Request a copy of your personal data we hold</li>
+            <li><strong>Correction</strong> — Request correction of inaccurate data</li>
+            <li><strong>Deletion</strong> — Request deletion of your data (subject to legal requirements)</li>
+            <li><strong>Portability</strong> — Receive your data in a structured, readable format</li>
+            <li><strong>Object</strong> — Object to processing of your data for specific purposes</li>
+          </ul>
+          <p>To exercise these rights, contact us at <a href="mailto:privacy@primecare.ph" class="legal-link">privacy@primecare.ph</a></p>
+        </section>
+
+        <section class="legal-section" id="cookies">
+          <h2>7. Cookies</h2>
+          <p>Our website uses cookies to improve your experience. We use:</p>
+          <ul class="legal-list">
+            <li><strong>Essential Cookies</strong> — Required for the website to function properly</li>
+            <li><strong>Session Cookies</strong> — To keep you logged in during your session</li>
+            <li><strong>Analytics Cookies</strong> — To understand how users interact with our platform</li>
+          </ul>
+          <p>You can control cookie settings through your browser. Disabling essential cookies may affect platform functionality.</p>
+        </section>
+
+        <section class="legal-section" id="aws">
+          <h2>8. Cloud Storage (AWS)</h2>
+          <p>PrimeCare uses Amazon Web Services (AWS) to host and store data securely. Specifically:</p>
+          <ul class="legal-list">
+            <li><strong>Amazon S3</strong> — Stores website files and patient documents</li>
+            <li><strong>AWS CloudFront</strong> — Delivers content securely and efficiently</li>
+            <li><strong>AWS IAM</strong> — Controls who can access your data</li>
+            <li><strong>AWS CloudWatch</strong> — Monitors system health and security events</li>
+            <li><strong>AWS SES</strong> — Sends transactional emails securely</li>
+          </ul>
+          <p>All data stored on AWS is encrypted at rest and in transit.</p>
+        </section>
+
+        <section class="legal-section" id="children">
+          <h2>9. Children's Privacy</h2>
+          <p>Our services are not directed to children under 18 without parental consent. If a parent or guardian is booking on behalf of a minor, they are responsible for ensuring the accuracy of the information provided.</p>
+        </section>
+
+        <section class="legal-section" id="contact">
+          <h2>10. Contact Us</h2>
+          <p>For privacy-related concerns or to exercise your data rights:</p>
+          <div class="legal-contact-box">
+            <p>📍 123 Health St., Barangay Maliwanag, Las Piñas City, Metro Manila</p>
+            <p>📞 (02) 8123-4567</p>
+            <p>✉️ privacy@primecare.ph</p>
+            <p>🕐 Monday – Saturday: 8:00 AM – 6:00 PM</p>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="legal-footer-links">
+        <a href="terms.html" class="legal-related-btn">Read Terms of Service →</a>
+        <a href="index.html" class="legal-related-btn secondary">Back to Home</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="landing-footer">
+    <div class="footer-brand">
+      <span class="brand-name">PrimeCare</span>
+      <span class="brand-sub">Medical Clinic</span>
+    </div>
+    <p class="footer-tagline">Compassion You Can Trust, Care You Deserve</p>
+    <div class="footer-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#services">Services</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="login.html">Log In</a>
+    </div>
+    <a href="admin-login.html" class="admin-portal-link">Admin Portal</a>
+    <p class="footer-copy">© 2026 PrimeCare Medical Clinic. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+  </script>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="View all your PrimeCare Medical Clinic appointments." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeCare – Appointments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="appointments-page">
+
+  <!-- Drawer Overlay -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+  <!-- Side Drawer -->
+  <div class="side-drawer" id="sideDrawer">
+    <div class="drawer-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="appointments.html" class="active">Appointments</a></li>
+      <li><a href="messages.html">Messages</a></li>
+      <li><a href="settings.html">Settings</a></li>
+    </ul>
+    <div class="drawer-logout">
+      <a href="index.html" onclick="PrimeCareDB.logout()">Log out</a>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="hamburger" onclick="openDrawer()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="navbar-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <div class="navbar-right">
+      <button class="nav-icon" onclick="openModal('searchModal')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+        </svg>
+      </button>
+      <a href="notifications.html" class="nav-icon" style="position:relative;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span class="notif-badge">2</span>
+      </a>
+      <div class="avatar-placeholder">A</div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+  <!-- Page Header -->
+  <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="home.html">Home</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Appointments</li></ol></nav>
+
+  <div class="page-header">
+    <h2>Your Appointments</h2>
+    <a href="home.html" class="btn-outline">Back to Home</a>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <label>Filter:</label>
+    <select id="filterSelect" onchange="filterAppointments()">
+      <option value="all">All</option>
+      <option value="pending">Pending</option>
+      <option value="complete">Complete</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+    <div class="search-box">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" placeholder="Search" id="searchInput" oninput="filterAppointments()" />
+    </div>
+  </div>
+
+  <!-- Appointment List -->
+  <div class="appt-list" id="apptList">
+    <div id="apptRendered"></div>
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- Notification Modal -->
+  <div class="modal-overlay" id="notifModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Notifications
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+        </h3>
+        <button class="modal-close" onclick="closeModal('notifModal')">✕</button>
+      </div>
+      <p style="text-align:center; font-size:0.85rem; color:#4a6fa5; font-weight:600;">No new notifications</p>
+      <div class="notif-section-title">Early Notifications</div>
+      <div class="notif-item">
+        <div class="notif-dot teal"></div>
+        <div>
+          <h4>Appointment Completed</h4>
+          <p>Your January 2 appointment has been completed. You may now view your appointment details.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="modal-overlay" id="searchModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Search</h3>
+        <button class="modal-close" onclick="closeModal('searchModal')">✕</button>
+      </div>
+      <div class="search-box" style="margin-bottom:16px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Search appointments..." oninput="handleModalSearch(this.value)" />
+      </div>
+      <div id="modalSearchResults"></div>
+    </div>
+  </div>
+
+  <script>
+    requireLogin();
+
+    function openDrawer()  { document.getElementById('sideDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('sideDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+    function openModal(id)  { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    document.querySelectorAll('.modal-overlay').forEach(function(o) {
+      o.addEventListener('click', function(e) { if (e.target === o) closeModal(o.id); });
+    });
+
+    // ── Load appointments from DB ─────────────────────────
+    var allAppointments = [];
+    var rawAppts = PrimeCareDB.getAppointments();
+    rawAppts.forEach(function(a) {
+      var cls   = a.status === 'complete' ? 'badge-complete' : a.status === 'pending' ? 'badge-pending' : 'badge-cancelled';
+      var label = a.status === 'complete' ? 'Complete'       : a.status === 'pending' ? 'Pending: Confirmation' : 'Cancelled';
+      allAppointments.push({
+        id:     a.id,
+        title:  a.title,
+        doctor: a.doctor,
+        date:   a.date,
+        time:   a.startTime + ' - ' + a.endTime,
+        status: a.status,
+        label:  label,
+        cls:    cls,
+      });
+    });
+
+    const ITEMS_PER_PAGE = 4;
+    let currentPage = 1;
+    let filteredData = [...allAppointments];
+
+    // ── Render list ───────────────────────────────────────
+    function renderList() {
+      const start  = (currentPage - 1) * ITEMS_PER_PAGE;
+      const end    = start + ITEMS_PER_PAGE;
+      const paged  = filteredData.slice(start, end);
+      const container = document.getElementById('apptRendered');
+
+      if (filteredData.length === 0) {
+        container.innerHTML =
+          '<div style="text-align:center; padding:32px; color:#4a6fa5; font-weight:700; font-size:0.9rem;">' +
+          '📭 No appointments found.</div>';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+      }
+
+      // Separate upcoming vs previous
+      const upcoming = paged.filter(a => a.status === 'pending');
+      const previous = paged.filter(a => a.status !== 'pending');
+
+      let html = '';
+      if (upcoming.length) {
+        html += '<h3 class="appt-list-label">Upcoming Appointments</h3>';
+        html += upcoming.map(renderItem).join('');
+      }
+      if (previous.length) {
+        html += '<h3 class="appt-list-label" style="margin-top:16px;">Previous Appointments</h3>';
+        html += previous.map(renderItem).join('');
+      }
+
+      container.innerHTML = html;
+      renderPagination();
+    }
+
+    function renderItem(a) {
+      var link = a.id ? 'appointment-detail.html?id=' + a.id : 'appointment-detail.html';
+      return '<a href="' + link + '" class="appt-list-item">' +
+        '<div><h4>' + a.title + '</h4>' +
+        '<p>' + a.doctor + ' &nbsp;|&nbsp; ' + a.date + ' &nbsp; ' + a.time + '</p></div>' +
+        '<span class="badge ' + a.cls + '">' + a.label + '</span>' +
+        '</a>';
+    }
+
+    // ── Render pagination controls ────────────────────────
+    function renderPagination() {
+      const total = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+      const pg    = document.getElementById('pagination');
+      if (total <= 1) { pg.innerHTML = ''; return; }
+
+      let html = '';
+      html += '<button class="pg-btn" onclick="changePage(' + (currentPage-1) + ')" ' +
+              (currentPage === 1 ? 'disabled' : '') + '>← Prev</button>';
+
+      for (let i = 1; i <= total; i++) {
+        html += '<button class="pg-btn pg-num ' + (i === currentPage ? 'active' : '') + '" ' +
+                'onclick="changePage(' + i + ')">' + i + '</button>';
+      }
+
+      html += '<button class="pg-btn" onclick="changePage(' + (currentPage+1) + ')" ' +
+              (currentPage === total ? 'disabled' : '') + '>Next →</button>';
+
+      html += '<span class="pg-info">Page ' + currentPage + ' of ' + total + ' &nbsp;·&nbsp; ' +
+              filteredData.length + ' appointments</span>';
+
+      pg.innerHTML = html;
+    }
+
+    function changePage(n) {
+      const total = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+      if (n < 1 || n > total) return;
+      currentPage = n;
+      renderList();
+      window.scrollTo({ top: document.getElementById('apptList').offsetTop - 80, behavior: 'smooth' });
+    }
+
+    // ── Filter & Search ───────────────────────────────────
+    function filterAppointments() {
+      const filter = document.getElementById('filterSelect').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      filteredData = allAppointments.filter(function(a) {
+        const matchF = filter === 'all' || a.status === filter;
+        const matchS = a.title.toLowerCase().includes(search) ||
+                       a.doctor.toLowerCase().includes(search);
+        return matchF && matchS;
+      });
+      currentPage = 1;
+      renderList();
+    }
+
+    // ── Modal Search ──────────────────────────────────────
+    function handleModalSearch(q) {
+      const el = document.getElementById('modalSearchResults');
+      if (!q) { el.innerHTML = ''; return; }
+      const res = allAppointments.filter(function(a) {
+        return a.title.toLowerCase().includes(q.toLowerCase()) ||
+               a.doctor.toLowerCase().includes(q.toLowerCase());
+      });
+      el.innerHTML = res.length === 0
+        ? '<p style="text-align:center;color:#4a6fa5;font-size:0.85rem;font-weight:600;">No results found.</p>'
+        : res.map(function(a) {
+            return '<a href="appointment-detail.html" class="appt-list-item" style="margin-bottom:8px;text-decoration:none;color:inherit;">' +
+              '<div><h4>'+a.title+'</h4><p>'+a.doctor+' | '+a.date+'</p></div>' +
+              '<span class="badge '+a.cls+'">'+a.label+'</span></a>';
+          }).join('');
+    }
+
+    // Init
+    renderList();
+  </script>
+
+  </main>
+
+  <footer class="inner-footer">
+    <p>© 2026 PrimeCare Medical Clinic. All rights reserved.</p>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>

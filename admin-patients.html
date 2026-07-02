@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="PrimeCare Admin – view and manage all patients." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeCare – Admin Patients</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <script src="db.js"></script>
+  <script src="admin-auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="admin-page">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-brand"><div class="brand-name">PrimeCare</div><div class="brand-sub">Admin Portal</div></div>
+    <nav class="admin-nav">
+      <a href="admin-dashboard.html"    class="admin-nav-item">        <span class="admin-nav-icon">📊</span> Dashboard</a>
+      <a href="admin-appointments.html" class="admin-nav-item">        <span class="admin-nav-icon">📅</span> Appointments</a>
+      <a href="admin-patients.html"     class="admin-nav-item active">  <span class="admin-nav-icon">👥</span> Patients</a>
+      <a href="admin-doctors.html"      class="admin-nav-item">        <span class="admin-nav-icon">👨‍⚕️</span> Doctors</a>
+      <a href="admin-messages.html"     class="admin-nav-item">        <span class="admin-nav-icon">✉️</span> Messages</a>
+      <a href="admin-reports.html"      class="admin-nav-item">        <span class="admin-nav-icon">📈</span> Reports</a>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="admin-login.html" class="admin-logout-btn" onclick="PrimeCareDB.logout()">🚪 Log Out</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button class="admin-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <h1 class="admin-page-title">Patients</h1>
+      </div>
+      <div class="admin-topbar-right">
+        <div class="admin-user-info"><div class="admin-avatar">AD</div><span>Admin</span></div>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="admin-dashboard.html">Admin</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Patients</li></ol></nav>
+      <section class="admin-section">
+        <div class="admin-filter-bar">
+          <div class="admin-search" style="flex:1;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="text" placeholder="Search patient name..." oninput="searchPatients(this.value)" />
+          </div>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table" id="patientsTable">
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Full Name</th>
+                <th>Contact</th>
+                <th>Blood Type</th>
+                <th>Total Visits</th>
+                <th>Last Visit</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="patientBody">
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="patientPagination"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const patients = [
+      { id:'P-001', name:'Adrian Lei Frio', contact:'+63 912 345 6789', blood:'O+',  visits:5, last:'Jan 2, 2026',  status:'active'   },
+      { id:'P-002', name:'Maria Clara',     contact:'+63 917 234 5678', blood:'A+',  visits:3, last:'Feb 10, 2026', status:'active'   },
+      { id:'P-003', name:'Jose Reyes',      contact:'+63 918 345 6789', blood:'B+',  visits:2, last:'Feb 9, 2026',  status:'active'   },
+      { id:'P-004', name:'Ana Santos',      contact:'+63 919 456 7890', blood:'AB-', visits:7, last:'Feb 9, 2026',  status:'active'   },
+      { id:'P-005', name:'Pedro Cruz',      contact:'+63 920 567 8901', blood:'O-',  visits:1, last:'Jan 15, 2026', status:'inactive' },
+      { id:'P-006', name:'Liza Reyes',      contact:'+63 921 678 9012', blood:'A-',  visits:4, last:'Feb 7, 2026',  status:'active'   },
+      { id:'P-007', name:'Carlo Mendoza',   contact:'+63 922 789 0123', blood:'B-',  visits:6, last:'Feb 6, 2026',  status:'active'   },
+      { id:'P-008', name:'Rosa Garcia',     contact:'+63 923 890 1234', blood:'O+',  visits:2, last:'Jan 28, 2026', status:'active'   },
+      { id:'P-009', name:'Miguel Torres',   contact:'+63 924 901 2345', blood:'A-',  visits:4, last:'Jan 20, 2026', status:'active'   },
+      { id:'P-010', name:'Elena Reyes',     contact:'+63 925 012 3456', blood:'B+',  visits:1, last:'Dec 15, 2025', status:'inactive' },
+    ];
+
+    const PG = 5;
+    let currentPg = 1;
+    let filtered  = [...patients];
+
+    function renderPatients(data, page) {
+      page = page || 1;
+      currentPg = page;
+      filtered  = data;
+
+      const start = (page - 1) * PG;
+      const paged = data.slice(start, start + PG);
+
+      document.getElementById('patientBody').innerHTML = paged.length === 0
+        ? '<tr><td colspan="7" style="text-align:center;padding:24px;color:#4a6fa5;font-weight:700;">No patients found.</td></tr>'
+        : paged.map(function(p) {
+            const sc = p.status === 'active' ? 'badge-complete' : 'badge-cancelled';
+            return '<tr><td>'+p.id+'</td><td>'+p.name+'</td><td>'+p.contact+'</td><td>'+p.blood+'</td>' +
+              '<td style="text-align:center;">'+p.visits+'</td><td>'+p.last+'</td>' +
+              '<td><span class="badge '+sc+'" style="font-size:0.78rem;padding:4px 10px;">' +
+              p.status.charAt(0).toUpperCase()+p.status.slice(1)+'</span></td></tr>';
+          }).join('');
+
+      renderPg(data.length, page);
+    }
+
+    function renderPg(total, page) {
+      const pages = Math.ceil(total / PG);
+      const el    = document.getElementById('patientPagination');
+      if (!el) return;
+      if (pages <= 1) { el.innerHTML = ''; return; }
+
+      let html = '<button class="pg-btn" onclick="changePg('+(page-1)+')" '+(page===1?'disabled':'')+'>← Prev</button>';
+      for (let i = 1; i <= pages; i++) {
+        html += '<button class="pg-btn pg-num '+(i===page?'active':'')+'" onclick="changePg('+i+')">'+i+'</button>';
+      }
+      html += '<button class="pg-btn" onclick="changePg('+(page+1)+')" '+(page===pages?'disabled':'')+'>Next →</button>';
+      html += '<span class="pg-info">Page '+page+' of '+pages+' · '+total+' patients</span>';
+      el.innerHTML = html;
+    }
+
+    function changePg(n) {
+      const pages = Math.ceil(filtered.length / PG);
+      if (n < 1 || n > pages) return;
+      renderPatients(filtered, n);
+    }
+
+    function searchPatients(q) {
+      const result = patients.filter(function(p) {
+        return p.name.toLowerCase().includes(q.toLowerCase()) ||
+               p.id.toLowerCase().includes(q.toLowerCase());
+      });
+      renderPatients(result, 1);
+    }
+
+    requireAdmin();
+
+    function toggleSidebar() { document.getElementById('adminSidebar').classList.toggle('collapsed'); }
+
+    renderPatients(patients, 1);
+  </script>
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>

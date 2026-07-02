@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PrimeCare Medical Clinic patient dashboard – view and manage your appointments." />
+  <title>PrimeCare – Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="db.js"></script>
+  <script src="auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="home-page">
+
+  <!-- Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="sideDrawer">
+    <div class="drawer-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="home.html" class="active">Home</a></li>
+      <li><a href="appointments.html">Appointments</a></li>
+      <li><a href="messages.html">Messages</a></li>
+      <li><a href="settings.html">Settings</a></li>
+    </ul>
+    <div class="drawer-logout">
+      <a href="index.html" onclick="PrimeCareDB.logout()">Log out</a>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="hamburger" onclick="openDrawer()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="navbar-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Medical Clinic</div>
+    </div>
+    <div class="navbar-right">
+      <a href="notifications.html" class="nav-icon" style="position:relative;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span class="notif-badge">2</span>
+      </a>
+      <div class="avatar-placeholder">A</div>
+    </div>
+  </nav>
+
+  <main class="page-main">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item active">Home</li>
+      </ol>
+    </nav>
+
+    <div class="dashboard-body">
+
+      <!-- ── TOP: WELCOME + QUICK STATS ── -->
+      <section class="dashboard-hero">
+        <div class="dashboard-welcome">
+          <div class="dashboard-welcome-text">
+            <p class="dashboard-greeting" id="dashGreeting">Good morning</p>
+            <h2 id="homeWelcome">Welcome back!</h2>
+            <p class="dashboard-sub">Where your Health is our Top Priority</p>
+          </div>
+          <a href="book-appointment.html" class="btn btn-primary dashboard-book-btn">
+            + Book Appointment
+          </a>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="dashboard-stats">
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">📅</div>
+            <div class="dash-stat-info">
+              <p class="dash-stat-value" id="statTotal">0</p>
+              <p class="dash-stat-label">Total Appointments</p>
+            </div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">⏳</div>
+            <div class="dash-stat-info">
+              <p class="dash-stat-value" id="statPending">0</p>
+              <p class="dash-stat-label">Pending</p>
+            </div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">✅</div>
+            <div class="dash-stat-info">
+              <p class="dash-stat-value" id="statComplete">0</p>
+              <p class="dash-stat-label">Completed</p>
+            </div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dash-stat-icon">❌</div>
+            <div class="dash-stat-info">
+              <p class="dash-stat-value" id="statCancelled">0</p>
+              <p class="dash-stat-label">Cancelled</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── MAIN CONTENT GRID ── -->
+      <div class="dashboard-grid">
+
+        <!-- LEFT: Appointments -->
+        <div class="dashboard-left">
+
+          <!-- Upcoming Appointments -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Your Appointments</h3>
+              <a href="appointments.html" class="dash-view-all">View All →</a>
+            </div>
+            <div id="homeApptList">
+              <div class="dash-loading">Loading appointments...</div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Quick Actions</h3>
+            </div>
+            <div class="quick-actions-grid">
+              <a href="book-appointment.html" class="quick-action-item">
+                <div class="quick-action-icon">📅</div>
+                <span>Book Appointment</span>
+              </a>
+              <a href="appointments.html" class="quick-action-item">
+                <div class="quick-action-icon">📋</div>
+                <span>My Appointments</span>
+              </a>
+              <a href="messages.html" class="quick-action-item">
+                <div class="quick-action-icon">💬</div>
+                <span>Messages</span>
+              </a>
+              <a href="profile.html" class="quick-action-item">
+                <div class="quick-action-icon">👤</div>
+                <span>My Profile</span>
+              </a>
+              <a href="notifications.html" class="quick-action-item">
+                <div class="quick-action-icon">🔔</div>
+                <span>Notifications</span>
+              </a>
+              <a href="settings.html" class="quick-action-item">
+                <div class="quick-action-icon">⚙️</div>
+                <span>Settings</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Info sidebar -->
+        <div class="dashboard-right">
+
+          <!-- Clinic Info -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Clinic Information</h3>
+            </div>
+            <div class="clinic-info-list">
+              <div class="clinic-info-item">
+                <span class="clinic-info-icon">📍</span>
+                <div>
+                  <p class="clinic-info-label">Address</p>
+                  <p class="clinic-info-value">123 Health St., Las Piñas City, Metro Manila</p>
+                </div>
+              </div>
+              <div class="clinic-info-item">
+                <span class="clinic-info-icon">📞</span>
+                <div>
+                  <p class="clinic-info-label">Phone</p>
+                  <p class="clinic-info-value">(02) 8123-4567</p>
+                </div>
+              </div>
+              <div class="clinic-info-item">
+                <span class="clinic-info-icon">🕐</span>
+                <div>
+                  <p class="clinic-info-label">Clinic Hours</p>
+                  <p class="clinic-info-value">Mon – Sat: 8:00 AM – 6:00 PM</p>
+                </div>
+              </div>
+              <div class="clinic-info-item">
+                <span class="clinic-info-icon">✉️</span>
+                <div>
+                  <p class="clinic-info-label">Email</p>
+                  <p class="clinic-info-value">info@primecare.ph</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Available Doctors -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Our Doctors</h3>
+              <a href="index.html#doctors" class="dash-view-all">View All →</a>
+            </div>
+            <div class="dash-doctors-list">
+              <div class="dash-doctor-item">
+                <img src="assets/doctor-buena.jpg" alt="Dr. Buena" class="dash-doctor-img" />
+                <div class="dash-doctor-info">
+                  <p class="dash-doctor-name">Dr. John Buena</p>
+                  <p class="dash-doctor-spec">Orthopedics</p>
+                  <p class="dash-doctor-sched">Mon–Fri · 9AM–5PM</p>
+                </div>
+                <a href="book-appointment.html" class="dash-book-btn">Book</a>
+              </div>
+              <div class="dash-doctor-item">
+                <img src="assets/doctor-santos.jpg" alt="Dr. Santos" class="dash-doctor-img" />
+                <div class="dash-doctor-info">
+                  <p class="dash-doctor-name">Dr. Maria Santos</p>
+                  <p class="dash-doctor-spec">General Medicine</p>
+                  <p class="dash-doctor-sched">Mon–Sat · 8AM–4PM</p>
+                </div>
+                <a href="book-appointment.html" class="dash-book-btn">Book</a>
+              </div>
+              <div class="dash-doctor-item">
+                <img src="assets/doctor-gole.jpg" alt="Dr. Gole" class="dash-doctor-img" />
+                <div class="dash-doctor-info">
+                  <p class="dash-doctor-name">Dr. Ramon Gole</p>
+                  <p class="dash-doctor-spec">Dental Surgery</p>
+                  <p class="dash-doctor-sched">Tue–Sat · 10AM–6PM</p>
+                </div>
+                <a href="book-appointment.html" class="dash-book-btn">Book</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services -->
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Our Services</h3>
+            </div>
+            <div class="dash-services-list">
+              <div class="dash-service-item">
+                <span>🩺 General Consultation</span>
+                <span class="dash-service-fee">₱500</span>
+              </div>
+              <div class="dash-service-item">
+                <span>🦴 Orthopedics</span>
+                <span class="dash-service-fee">₱800</span>
+              </div>
+              <div class="dash-service-item">
+                <span>🦷 Dental Care</span>
+                <span class="dash-service-fee">₱600</span>
+              </div>
+              <div class="dash-service-item">
+                <span>🧪 Laboratory Tests</span>
+                <span class="dash-service-fee">₱400</span>
+              </div>
+              <div class="dash-service-item">
+                <span>📋 Physical Therapy</span>
+                <span class="dash-service-fee">₱1,500</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Search Modal -->
+  <div class="modal-overlay" id="searchModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Search</h3>
+        <button class="modal-close" onclick="closeModal('searchModal')">✕</button>
+      </div>
+      <div class="search-box" style="margin-bottom:16px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Search appointments..." oninput="handleSearch(this.value)" />
+      </div>
+      <div id="searchResults"></div>
+    </div>
+  </div>
+
+  <footer class="inner-footer">
+    <p>© 2026 PrimeCare Medical Clinic. All rights reserved.</p>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <script>
+    requireLogin();
+
+    function openDrawer()  { document.getElementById('sideDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+    function closeDrawer() { document.getElementById('sideDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+    function openModal(id)  { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    document.querySelectorAll('.modal-overlay').forEach(function(o) {
+      o.addEventListener('click', function(e) { if (e.target === o) closeModal(o.id); });
+    });
+
+    // ── Load user info ────────────────────────────────────
+    var user = PrimeCareDB.getCurrentUser();
+    if (user) {
+      document.getElementById('homeWelcome').textContent = 'Welcome back, ' + user.name + '!';
+    }
+
+    // ── Greeting based on time ────────────────────────────
+    var hour = new Date().getHours();
+    var greeting = hour < 12 ? 'Good morning ☀️' : hour < 17 ? 'Good afternoon 🌤' : 'Good evening 🌙';
+    document.getElementById('dashGreeting').textContent = greeting;
+
+    // ── Load Stats ────────────────────────────────────────
+    function loadStats() {
+      var appts     = PrimeCareDB.getAppointments();
+      var pending   = appts.filter(function(a) { return a.status === 'pending'; }).length;
+      var complete  = appts.filter(function(a) { return a.status === 'complete'; }).length;
+      var cancelled = appts.filter(function(a) { return a.status === 'cancelled'; }).length;
+
+      document.getElementById('statTotal').textContent     = appts.length;
+      document.getElementById('statPending').textContent   = pending;
+      document.getElementById('statComplete').textContent  = complete;
+      document.getElementById('statCancelled').textContent = cancelled;
+    }
+
+    // ── Load Appointments ─────────────────────────────────
+    function loadHomeAppointments() {
+      var appts  = PrimeCareDB.getAppointments();
+      var listEl = document.getElementById('homeApptList');
+
+      if (appts.length === 0) {
+        listEl.innerHTML =
+          '<div class="dash-empty">' +
+          '<p class="dash-empty-icon">📭</p>' +
+          '<p class="dash-empty-text">No appointments yet.</p>' +
+          '<a href="book-appointment.html" class="btn btn-primary" style="width:auto;padding:10px 20px;font-size:0.85rem;margin-top:12px;">Book Now</a>' +
+          '</div>';
+        return;
+      }
+
+      // Show latest 4
+      var recent = appts.slice(0, 4);
+      var html = '';
+      recent.forEach(function(a) {
+        var bc = a.status === 'complete'  ? 'badge-complete'  :
+                 a.status === 'pending'   ? 'badge-pending'   : 'badge-cancelled';
+        var bt = a.status === 'complete'  ? 'Complete'        :
+                 a.status === 'pending'   ? 'Pending'         : 'Cancelled';
+        html +=
+          '<a href="appointment-detail.html?id=' + a.id + '" class="appt-item appt-item-link">' +
+            '<div class="appt-item-info">' +
+              '<h4>' + a.title + '</h4>' +
+              '<p>' + a.doctor + ' &nbsp;|&nbsp; ' + a.date + ' &nbsp; ' + a.startTime + '</p>' +
+            '</div>' +
+            '<span class="badge ' + bc + '">' + bt + '</span>' +
+          '</a>';
+      });
+      listEl.innerHTML = html;
+    }
+
+    // ── Search ────────────────────────────────────────────
+    function handleSearch(q) {
+      var el    = document.getElementById('searchResults');
+      var appts = PrimeCareDB.getAppointments();
+      if (!q) { el.innerHTML = ''; return; }
+      var res = appts.filter(function(a) {
+        return a.title.toLowerCase().includes(q.toLowerCase()) ||
+               a.doctor.toLowerCase().includes(q.toLowerCase());
+      });
+      if (res.length === 0) {
+        el.innerHTML = '<p style="text-align:center;color:#4a6fa5;font-size:0.85rem;font-weight:600;">No results found.</p>';
+        return;
+      }
+      el.innerHTML = res.map(function(a) {
+        var bc = a.status === 'complete' ? 'badge-complete' : a.status === 'pending' ? 'badge-pending' : 'badge-cancelled';
+        var bt = a.status === 'complete' ? 'Complete'       : a.status === 'pending' ? 'Pending'       : 'Cancelled';
+        return '<a href="appointment-detail.html?id=' + a.id + '" class="appt-list-item" style="margin-bottom:8px;text-decoration:none;color:inherit;">' +
+          '<div><h4>' + a.title + '</h4><p>' + a.doctor + ' | ' + a.date + '</p></div>' +
+          '<span class="badge ' + bc + '">' + bt + '</span></a>';
+      }).join('');
+    }
+
+    // ── Back to Top ───────────────────────────────────────
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    var btt = document.getElementById('backToTop');
+    if (btt) {
+      window.addEventListener('scroll', function() {
+        btt.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+    }
+
+    // ── Init ──────────────────────────────────────────────
+    loadStats();
+    loadHomeAppointments();
+  </script>
+
+</body>
+</html>

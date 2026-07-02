@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Create a PrimeCare Medical Clinic patient account and start booking appointments." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrimeCare – Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="db.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="signup-page">
+
+  <!-- Logo -->
+  <main class="login-main">
+  <div class="auth-top-image">
+    <img src="assets/clinic-bg.jpg" alt="PrimeCare Medical Clinic" class="auth-top-img" />
+    <div class="auth-top-overlay"></div>
+  </div>
+  <div class="signup-logo">
+    <div class="login-logo-icon">+</div>
+    <h1>PrimeCare</h1>
+    <p class="subtitle">Medical Clinic</p>
+    <p class="login-logo-tag">Create your free account</p>
+  </div>
+
+  <!-- Sign Up Card -->
+  <div class="signup-card">
+    <h2>Create Account 🏥</h2>
+
+    <div class="signup-form">
+
+      <!-- Name -->
+      <div class="input-group">
+        <input type="text" class="input-field" id="nameInput" placeholder="Name" />
+      </div>
+
+      <!-- Username -->
+      <div class="input-group">
+        <input type="text" class="input-field" id="usernameInput" placeholder="Username" />
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <input type="email" class="input-field" id="emailInput" placeholder="Email" />
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <input type="password" class="input-field" id="passwordInput" placeholder="Password" oninput="checkStrength(this.value)" />
+        <span class="eye-icon" onclick="togglePassword('passwordInput')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </span>
+      </div>
+
+      <!-- Password Strength Meter -->
+      <div class="strength-meter" id="strengthMeter" style="display:none;">
+        <div class="strength-bars">
+          <div class="strength-bar" id="bar1"></div>
+          <div class="strength-bar" id="bar2"></div>
+          <div class="strength-bar" id="bar3"></div>
+          <div class="strength-bar" id="bar4"></div>
+        </div>
+        <div class="strength-info">
+          <span class="strength-label" id="strengthLabel">Weak</span>
+          <span class="strength-tips" id="strengthTips"></span>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="input-group">
+        <input type="password" class="input-field" id="confirmInput" placeholder="Confirm Password" />
+        <span class="eye-icon" onclick="togglePassword('confirmInput')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </span>
+      </div>
+
+      <!-- Error message -->
+      <p class="signup-error" id="signupError" style="display:none; color:#c0392b; font-size:0.82rem; font-weight:700; text-align:center;"></p>
+
+      <!-- Submit -->
+      <p style="font-size:0.75rem; font-weight:600; color:#1e3a5f; text-align:center; margin-bottom:4px; opacity:0.8;">
+        By signing up, you agree to our
+        <a href="terms.html" style="font-weight:800; color:#1e3a5f;">Terms of Service</a>
+        and <a href="privacy.html" style="font-weight:800; color:#1e3a5f;">Privacy Policy</a>.
+      </p>
+      <button class="btn btn-white" onclick="handleSignup()">Submit</button>
+
+    </div>
+  </div>
+
+  <!-- Back to login -->
+  <div class="login-footer" style="margin-top: 16px;">
+    <p>
+      <span class="line"></span>
+      Already have an account?
+      <span class="line"></span>
+    </p>
+    <a href="login.html" class="btn btn-primary">Log In</a>
+  </div>
+
+  <script>
+    function togglePassword(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function checkStrength(pw) {
+      const meter  = document.getElementById('strengthMeter');
+      const label  = document.getElementById('strengthLabel');
+      const tips   = document.getElementById('strengthTips');
+      const bars   = [
+        document.getElementById('bar1'),
+        document.getElementById('bar2'),
+        document.getElementById('bar3'),
+        document.getElementById('bar4'),
+      ];
+
+      if (!pw) { meter.style.display = 'none'; return; }
+      meter.style.display = 'block';
+
+      // Calculate score
+      let score = 0;
+      const checks = {
+        length:   pw.length >= 8,
+        upper:    /[A-Z]/.test(pw),
+        lower:    /[a-z]/.test(pw),
+        number:   /[0-9]/.test(pw),
+        special:  /[^A-Za-z0-9]/.test(pw),
+      };
+      score = Object.values(checks).filter(Boolean).length;
+
+      // Missing hints
+      const missing = [];
+      if (!checks.length)  missing.push('8+ chars');
+      if (!checks.upper)   missing.push('uppercase');
+      if (!checks.number)  missing.push('number');
+      if (!checks.special) missing.push('symbol');
+
+      // Colors and labels per score
+      const levels = [
+        { color: '#f08080', label: 'Too Short',  fill: 1 },
+        { color: '#f08080', label: 'Weak',       fill: 1 },
+        { color: '#f5c26b', label: 'Fair',       fill: 2 },
+        { color: '#f5e97a', label: 'Good',       fill: 3 },
+        { color: '#5ce6c8', label: 'Strong',     fill: 4 },
+      ];
+
+      const level = levels[Math.min(score, 4)];
+
+      bars.forEach(function(bar, i) {
+        bar.style.backgroundColor = i < level.fill ? level.color : '#c8e6e6';
+        bar.style.transform = i < level.fill ? 'scaleY(1.2)' : 'scaleY(1)';
+      });
+
+      label.textContent    = level.label;
+      label.style.color    = level.color;
+      tips.textContent     = missing.length ? 'Add: ' + missing.join(', ') : '✓ Great password!';
+      tips.style.color     = missing.length ? '#4a6fa5' : '#27ae60';
+    }
+
+    // Redirect if already logged in
+    if (PrimeCareDB.isLoggedIn()) {
+      var existingUser = PrimeCareDB.getCurrentUser();
+      window.location.href = existingUser.role === 'admin' ? 'admin-dashboard.html' : 'home.html';
+    }
+
+    function handleSignup() {
+      var name     = document.getElementById('nameInput').value.trim();
+      var username = document.getElementById('usernameInput').value.trim();
+      var email    = document.getElementById('emailInput').value.trim();
+      var password = document.getElementById('passwordInput').value.trim();
+      var confirm  = document.getElementById('confirmInput').value.trim();
+      var errorEl  = document.getElementById('signupError');
+
+      if (!name || !username || !email || !password || !confirm) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      if (password !== confirm) {
+        errorEl.textContent = 'Passwords do not match.';
+        errorEl.style.display = 'block';
+        document.getElementById('passwordInput').classList.add('error');
+        document.getElementById('confirmInput').classList.add('error');
+        return;
+      }
+
+      // Actually save to real DB
+      var result = PrimeCareDB.registerUser(name, username, email, password);
+
+      if (result.success) {
+        errorEl.style.display = 'none';
+        showToast('success', 'Account Created!', 'Your account has been created. Redirecting to login...', 1500);
+        setTimeout(function() { window.location.href = 'login.html'; }, 1200);
+      } else {
+        errorEl.textContent = result.message;
+        errorEl.style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+</html>

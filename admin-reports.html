@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PrimeCare Admin – Reports and Data Visualization." />
+  <title>PrimeCare – Admin Reports</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="admin.css" />
+  <script src="db.js"></script>
+  <script src="admin-auth.js"></script>
+  <script src="toast.js"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="admin-page">
+
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-brand">
+      <div class="brand-name">PrimeCare</div>
+      <div class="brand-sub">Admin Portal</div>
+    </div>
+    <nav class="admin-nav">
+      <a href="admin-dashboard.html"    class="admin-nav-item">        <span class="admin-nav-icon">📊</span> Dashboard</a>
+      <a href="admin-appointments.html" class="admin-nav-item">        <span class="admin-nav-icon">📅</span> Appointments</a>
+      <a href="admin-patients.html"     class="admin-nav-item">        <span class="admin-nav-icon">👥</span> Patients</a>
+      <a href="admin-doctors.html"      class="admin-nav-item">        <span class="admin-nav-icon">👨‍⚕️</span> Doctors</a>
+      <a href="admin-messages.html"     class="admin-nav-item">        <span class="admin-nav-icon">✉️</span> Messages</a>
+      <a href="admin-reports.html"      class="admin-nav-item active">  <span class="admin-nav-icon">📈</span> Reports</a>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="admin-login.html" class="admin-logout-btn" onclick="PrimeCareDB.logout()">🚪 Log Out</a>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button class="admin-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <h1 class="admin-page-title">Reports & Analytics</h1>
+      </div>
+      <div class="admin-topbar-right">
+        <div class="admin-user-info">
+          <div class="admin-avatar">AD</div>
+          <span>Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <ol class="breadcrumb-list">
+          <li class="breadcrumb-item"><a href="admin-dashboard.html">Admin</a></li>
+          <li class="breadcrumb-sep">›</li>
+          <li class="breadcrumb-item active">Reports</li>
+        </ol>
+      </nav>
+
+      <!-- Summary Stats -->
+      <div class="admin-stats-grid" style="margin-bottom:20px;">
+        <div class="admin-stat-card blue">
+          <div class="stat-icon">📅</div>
+          <div class="stat-details">
+            <p class="stat-value">152</p>
+            <p class="stat-label">Total Appointments</p>
+          </div>
+        </div>
+        <div class="admin-stat-card teal">
+          <div class="stat-icon">✅</div>
+          <div class="stat-details">
+            <p class="stat-value">118</p>
+            <p class="stat-label">Completed</p>
+          </div>
+        </div>
+        <div class="admin-stat-card yellow">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-details">
+            <p class="stat-value">24</p>
+            <p class="stat-label">Pending</p>
+          </div>
+        </div>
+        <div class="admin-stat-card green">
+          <div class="stat-icon">💰</div>
+          <div class="stat-details">
+            <p class="stat-value">₱89,400</p>
+            <p class="stat-label">Total Revenue</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row 1: Bar + Pie -->
+      <div class="charts-row">
+
+        <!-- Bar Chart: Monthly Appointments -->
+        <div class="admin-section chart-section">
+          <div class="admin-section-header">
+            <h2>📊 Monthly Appointments</h2>
+            <span class="chart-badge">Bar Graph</span>
+          </div>
+          <p class="chart-desc">Total number of appointments booked per month for the year 2026.</p>
+          <div class="chart-wrapper">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Pie Chart: Appointment Status -->
+        <div class="admin-section chart-section">
+          <div class="admin-section-header">
+            <h2>🥧 Appointment Status</h2>
+            <span class="chart-badge">Pie Chart</span>
+          </div>
+          <p class="chart-desc">Distribution of appointment statuses across all patients.</p>
+          <div class="chart-wrapper chart-wrapper-pie">
+            <canvas id="pieChart"></canvas>
+          </div>
+          <div class="pie-legend" id="pieLegend"></div>
+        </div>
+
+      </div>
+
+      <!-- Line Chart: Revenue -->
+      <div class="admin-section chart-section" style="margin-top:20px;">
+        <div class="admin-section-header">
+          <h2>📈 Monthly Revenue</h2>
+          <span class="chart-badge">Line Graph</span>
+        </div>
+        <p class="chart-desc">Monthly revenue generated from consultation fees and services throughout 2026.</p>
+        <div class="chart-wrapper chart-wrapper-line">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Bar Chart: Services -->
+      <div class="admin-section chart-section" style="margin-top:20px;">
+        <div class="admin-section-header">
+          <h2>🩺 Appointments by Service</h2>
+          <span class="chart-badge">Bar Graph</span>
+        </div>
+        <p class="chart-desc">Number of appointments per medical service offered by the clinic.</p>
+        <div class="chart-wrapper">
+          <canvas id="serviceChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="admin-section" style="margin-top:20px;">
+        <div class="admin-section-header">
+          <h2>📋 Monthly Summary Table</h2>
+        </div>
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Total Appointments</th>
+                <th>Completed</th>
+                <th>Pending</th>
+                <th>Cancelled</th>
+                <th>Revenue</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <script>
+    requireAdmin();
+
+    function toggleSidebar() { document.getElementById('adminSidebar').classList.toggle('collapsed'); }
+    function scrollToTop()   { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+    var btt = document.getElementById('backToTop');
+    if (btt) {
+      window.addEventListener('scroll', function() {
+        btt.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+    }
+
+    // ── Color Palette ─────────────────────────────────────
+    var colors = {
+      primary:   '#4EAFC4',
+      dark:      '#0F2B4C',
+      teal:      '#00D2A8',
+      yellow:    '#FFD93D',
+      red:       '#FF6B81',
+      purple:    '#A855F7',
+      orange:    '#FB923C',
+      blue:      '#3B82F6',
+      green:     '#22C55E',
+    };
+
+    // ── Data ──────────────────────────────────────────────
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    var monthlyAppointments = [8, 14, 12, 18, 15, 22, 19, 25, 21, 17, 13, 10];
+    var monthlyRevenue      = [5200, 9800, 8400, 12600, 10500, 15400, 13300, 17500, 14700, 11900, 9100, 7000];
+    var monthlyCompleted    = [6, 11, 10, 14, 12, 18, 15, 20, 17, 14, 10, 8];
+    var monthlyPending      = [1, 2, 1, 3, 2, 3, 3, 4, 3, 2, 2, 1];
+    var monthlyCancelled    = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+    var statusData    = [118, 24, 10];
+    var statusLabels  = ['Completed', 'Pending', 'Cancelled'];
+    var statusColors  = [colors.teal, colors.yellow, colors.red];
+
+    var serviceData   = [42, 35, 28, 22, 18, 7];
+    var serviceLabels = ['General Consultation','Orthopedics','Dental Care','Laboratory Tests','Physical Therapy','Others'];
+    var serviceColors = [colors.primary, colors.blue, colors.purple, colors.orange, colors.green, colors.yellow];
+
+    // ── Chart Defaults ────────────────────────────────────
+    Chart.defaults.font.family = "'Nunito', 'Inter', sans-serif";
+    Chart.defaults.font.size   = 12;
+    Chart.defaults.color       = '#6B8BAD';
+
+    // ── 1. BAR CHART: Monthly Appointments ───────────────
+    new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Appointments',
+          data: monthlyAppointments,
+          backgroundColor: function(ctx) {
+            var gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(78,175,196,0.9)');
+            gradient.addColorStop(1, 'rgba(58,149,170,0.6)');
+            return gradient;
+          },
+          borderColor: colors.primary,
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: colors.dark,
+            titleColor: 'white',
+            bodyColor: 'rgba(255,255,255,0.8)',
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) { return ' ' + ctx.raw + ' appointments'; }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { display: false },
+          },
+          y: {
+            grid: { color: 'rgba(208,232,238,0.4)', lineWidth: 1 },
+            border: { display: false, dash: [4,4] },
+            ticks: { stepSize: 5 },
+            beginAtZero: true,
+          }
+        }
+      }
+    });
+
+    // ── 2. PIE CHART: Appointment Status ─────────────────
+    new Chart(document.getElementById('pieChart'), {
+      type: 'doughnut',
+      data: {
+        labels: statusLabels,
+        datasets: [{
+          data: statusData,
+          backgroundColor: statusColors,
+          borderColor: 'white',
+          borderWidth: 4,
+          hoverOffset: 10,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        cutout: '60%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: colors.dark,
+            titleColor: 'white',
+            bodyColor: 'rgba(255,255,255,0.8)',
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) {
+                var total = ctx.dataset.data.reduce(function(a,b){ return a+b; }, 0);
+                var pct   = Math.round(ctx.raw / total * 100);
+                return ' ' + ctx.raw + ' (' + pct + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Custom legend for pie chart
+    var pieLegendEl = document.getElementById('pieLegend');
+    var totalAppts  = statusData.reduce(function(a,b){ return a+b; }, 0);
+    pieLegendEl.innerHTML = statusLabels.map(function(label, i) {
+      var pct = Math.round(statusData[i] / totalAppts * 100);
+      return '<div class="pie-legend-item">' +
+        '<span class="pie-legend-dot" style="background:' + statusColors[i] + '"></span>' +
+        '<span class="pie-legend-label">' + label + '</span>' +
+        '<span class="pie-legend-value">' + statusData[i] + ' (' + pct + '%)</span>' +
+        '</div>';
+    }).join('');
+
+    // ── 3. LINE CHART: Monthly Revenue ───────────────────
+    new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Revenue (₱)',
+          data: monthlyRevenue,
+          borderColor: colors.primary,
+          borderWidth: 3,
+          backgroundColor: function(ctx) {
+            var gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(78,175,196,0.25)');
+            gradient.addColorStop(1, 'rgba(78,175,196,0.01)');
+            return gradient;
+          },
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: colors.primary,
+          pointBorderColor: 'white',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: colors.dark,
+            titleColor: 'white',
+            bodyColor: 'rgba(255,255,255,0.8)',
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) { return ' ₱' + ctx.raw.toLocaleString(); }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { display: false },
+          },
+          y: {
+            grid: { color: 'rgba(208,232,238,0.4)', lineWidth: 1 },
+            border: { display: false, dash: [4,4] },
+            beginAtZero: true,
+            ticks: {
+              callback: function(val) { return '₱' + val.toLocaleString(); }
+            }
+          }
+        }
+      }
+    });
+
+    // ── 4. BAR CHART: Services ────────────────────────────
+    new Chart(document.getElementById('serviceChart'), {
+      type: 'bar',
+      data: {
+        labels: serviceLabels,
+        datasets: [{
+          label: 'Appointments',
+          data: serviceData,
+          backgroundColor: serviceColors,
+          borderColor: serviceColors,
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: colors.dark,
+            titleColor: 'white',
+            bodyColor: 'rgba(255,255,255,0.8)',
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) { return ' ' + ctx.raw + ' appointments'; }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(208,232,238,0.4)' },
+            border: { display: false },
+            beginAtZero: true,
+          },
+          y: {
+            grid: { display: false },
+            border: { display: false },
+          }
+        }
+      }
+    });
+
+    // ── Summary Table ─────────────────────────────────────
+    var tbody = document.getElementById('summaryTableBody');
+    var html  = '';
+    months.forEach(function(month, i) {
+      html += '<tr>' +
+        '<td><strong>' + month + ' 2026</strong></td>' +
+        '<td style="text-align:center;">' + monthlyAppointments[i] + '</td>' +
+        '<td style="text-align:center;color:#00D2A8;font-weight:800;">' + monthlyCompleted[i] + '</td>' +
+        '<td style="text-align:center;color:#FFD93D;font-weight:800;">' + monthlyPending[i] + '</td>' +
+        '<td style="text-align:center;color:#FF6B81;font-weight:800;">' + monthlyCancelled[i] + '</td>' +
+        '<td style="font-weight:800;color:#0F2B4C;">₱' + monthlyRevenue[i].toLocaleString() + '</td>' +
+        '</tr>';
+    });
+
+    // Totals row
+    var totalApptSum = monthlyAppointments.reduce(function(a,b){ return a+b; }, 0);
+    var totalRev     = monthlyRevenue.reduce(function(a,b){ return a+b; }, 0);
+    var totalComp    = monthlyCompleted.reduce(function(a,b){ return a+b; }, 0);
+    var totalPend    = monthlyPending.reduce(function(a,b){ return a+b; }, 0);
+    var totalCanc    = monthlyCancelled.reduce(function(a,b){ return a+b; }, 0);
+    html += '<tr style="background:linear-gradient(135deg,#EBF5F7,#D6EEF3);font-weight:900;">' +
+      '<td><strong>TOTAL</strong></td>' +
+      '<td style="text-align:center;">' + totalApptSum + '</td>' +
+      '<td style="text-align:center;color:#00D2A8;">' + totalComp + '</td>' +
+      '<td style="text-align:center;color:#FFD93D;">' + totalPend + '</td>' +
+      '<td style="text-align:center;color:#FF6B81;">' + totalCanc + '</td>' +
+      '<td style="color:#0F2B4C;">₱' + totalRev.toLocaleString() + '</td>' +
+      '</tr>';
+
+    tbody.innerHTML = html;
+
+  </script>
+
+</body>
+</html>

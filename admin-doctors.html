@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="description" content="PrimeCare Admin – view doctor schedules and information." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PrimeCare – Admin Doctors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+  <script src="db.js"></script>
+  <script src="admin-auth.js"></script>
+  <script src="toast.js"></script>
+</head>
+<body class="admin-page">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-brand"><div class="brand-name">PrimeCare</div><div class="brand-sub">Admin Portal</div></div>
+    <nav class="admin-nav">
+      <a href="admin-dashboard.html"    class="admin-nav-item">       <span class="admin-nav-icon">📊</span> Dashboard</a>
+      <a href="admin-appointments.html" class="admin-nav-item">       <span class="admin-nav-icon">📅</span> Appointments</a>
+      <a href="admin-patients.html"     class="admin-nav-item">       <span class="admin-nav-icon">👥</span> Patients</a>
+      <a href="admin-doctors.html"      class="admin-nav-item active"> <span class="admin-nav-icon">👨‍⚕️</span> Doctors</a>
+      <a href="admin-messages.html"     class="admin-nav-item">       <span class="admin-nav-icon">✉️</span> Messages</a>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="admin-login.html" class="admin-logout-btn" onclick="PrimeCareDB.logout()">🚪 Log Out</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button class="admin-hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+        <h1 class="admin-page-title">Doctors</h1>
+      </div>
+      <div class="admin-topbar-right">
+        <div class="admin-user-info"><div class="admin-avatar">AD</div><span>Admin</span></div>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><ol class="breadcrumb-list"><li class="breadcrumb-item"><a href="admin-dashboard.html">Admin</a></li><li class="breadcrumb-sep">›</li><li class="breadcrumb-item active">Doctors</li></ol></nav>
+      <section class="admin-section">
+        <div class="admin-section-header" style="margin-bottom:20px;">
+          <h2>All Doctors</h2>
+        </div>
+        <div class="doctors-admin-grid">
+
+          <div class="doctor-admin-card">
+            <img src="assets/doctor-buena.jpg" alt="Dr. John Buena" class="doctor-admin-img"/>
+            <div class="doctor-admin-info">
+              <h3>Dr. John Buena</h3>
+              <p class="doctor-spec">Orthopedics</p>
+              <table class="billing-table" style="margin-top:10px;">
+                <tr><td>License No.</td><td>PRC-12345</td></tr>
+                <tr><td>Schedule</td><td>Mon – Fri</td></tr>
+                <tr><td>Hours</td><td>9:00 AM – 5:00 PM</td></tr>
+                <tr><td>Room</td><td>203</td></tr>
+                <tr><td>Patients Today</td><td>8</td></tr>
+              </table>
+              <span class="badge badge-complete" style="margin-top:10px; display:inline-block;">On Duty</span>
+            </div>
+          </div>
+
+          <div class="doctor-admin-card">
+            <img src="assets/doctor-santos.jpg" alt="Dr. Maria Santos" class="doctor-admin-img"/>
+            <div class="doctor-admin-info">
+              <h3>Dr. Maria Santos</h3>
+              <p class="doctor-spec">General Medicine</p>
+              <table class="billing-table" style="margin-top:10px;">
+                <tr><td>License No.</td><td>PRC-23456</td></tr>
+                <tr><td>Schedule</td><td>Mon – Sat</td></tr>
+                <tr><td>Hours</td><td>8:00 AM – 4:00 PM</td></tr>
+                <tr><td>Room</td><td>101</td></tr>
+                <tr><td>Patients Today</td><td>10</td></tr>
+              </table>
+              <span class="badge badge-complete" style="margin-top:10px; display:inline-block;">On Duty</span>
+            </div>
+          </div>
+
+          <div class="doctor-admin-card">
+            <img src="assets/doctor-gole.jpg" alt="Dr. Ramon Gole" class="doctor-admin-img"/>
+            <div class="doctor-admin-info">
+              <h3>Dr. Ramon Gole</h3>
+              <p class="doctor-spec">Dental Surgery</p>
+              <table class="billing-table" style="margin-top:10px;">
+                <tr><td>License No.</td><td>PRC-34567</td></tr>
+                <tr><td>Schedule</td><td>Tue – Sat</td></tr>
+                <tr><td>Hours</td><td>10:00 AM – 6:00 PM</td></tr>
+                <tr><td>Room</td><td>305</td></tr>
+                <tr><td>Patients Today</td><td>6</td></tr>
+              </table>
+              <span class="badge badge-complete" style="margin-top:10px; display:inline-block;">On Duty</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    requireAdmin();
+
+    function toggleSidebar() { document.getElementById('adminSidebar').classList.toggle('collapsed'); }
+  </script>
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+</body>
+</html>
