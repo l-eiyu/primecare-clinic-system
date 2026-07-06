@@ -20,7 +20,6 @@ This project was developed as a **Final Project** for the subject **Software Des
 |---|---|
 | **AWS S3** | http://primecare-clinic-website.s3-website-ap-southeast-1.amazonaws.com |
 | **GitHub Pages** | https://YOURUSERNAME.github.io/primecare-clinic |
-| **CloudFront (HTTPS)** | https://[your-cloudfront-id].cloudfront.net |
 
 ---
 
